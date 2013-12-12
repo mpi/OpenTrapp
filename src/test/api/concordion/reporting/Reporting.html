@@ -1,0 +1,139 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<body>
+
+    <h1>Reporting</h1>
+
+    <div class="examples">
+        <div class="example">
+
+            <h3>
+                <u>Example 1</u>: Listing all entries for given Project
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>Given there are following entries
+                    <table concordion:execute="workLogEntry(#id, #workload, #projectName)">
+                        <thead>
+                            <tr>
+                                <th concordion:set="#id">Id</th>
+                                <th concordion:set="#workload">Workload</th>
+                                <th concordion:set="#projectName">Project Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WL.0001</td>
+                                <td>1h</td>
+                                <td>TheProject</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0002</td>
+                                <td>2h</td>
+                                <td>OtherProject</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0003</td>
+                                <td>3h</td>
+                                <td>TheProject</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0004</td>
+                                <td>4h</td>
+                                <td>YetAnotherProject</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/projects/TheProject/work-log/entries</code></li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
+                <li>And response should look like:
+<pre concordion:assertEquals="response()">{
+    "items": [
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0001",
+            "id": "WL.0001",
+            "workload": "1h",
+            "projectName": "TheProject"
+        },
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0003",
+            "id": "WL.0003",
+            "workload": "3h",
+            "projectName": "TheProject"
+        }
+    ]
+}</pre>                
+                </li>
+            </ul>
+        </div>
+        <div class="example">
+
+            <h3>
+                <u>Example 2</u>: Listing all entries for given Employee
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>Given there are following entries
+                    <table concordion:execute="workLogEntry(#id, #workload, #projectName)">
+                        <thead>
+                            <tr>
+                                <th concordion:set="#id">Id</th>
+                                <th concordion:set="#workload">Workload</th>
+                                <th concordion:set="#projectName">Project Name</th>
+                                <th concordion:set="#employee">Employee</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WL.0001</td>
+                                <td>1h</td>
+                                <td>TheProject</td>
+                                <td>John</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0002</td>
+                                <td>2h</td>
+                                <td>OtherProject</td>
+                                <td>John</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0003</td>
+                                <td>3h</td>
+                                <td>TheProject</td>
+                                <td>Jane</td>
+                            </tr>
+                            <tr>
+                                <td>WL.0004</td>
+                                <td>4h</td>
+                                <td>YetAnotherProject</td>
+                                <td>Jane</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Jane/work-log/entries</code></li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
+                <li>And response should look like:
+<pre concordion:assertEquals="response()">{
+    "items": [
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0003",
+            "id": "WL.0003",
+            "workload": "3h",
+            "projectName": "TheProject"
+        },
+        {
+            "link": "/endpoints/v1/work-log/entries/WL.0004",
+            "id": "WL.0004",
+            "workload": "3h",
+            "projectName": "YetAnotherProject"
+        }
+    ]
+}</pre>                
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>

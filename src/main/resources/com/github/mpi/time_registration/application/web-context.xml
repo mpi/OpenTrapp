@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+<!-- 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+<!-- 		<property name="viewClass" value="org.springframework.web.servlet.view.InternalResourceView" /> -->
+<!-- 		<property name="contentType" value="text/html;charset=UTF-8" /> -->
+<!-- 		<property name="prefix" value="/views/" /> -->
+<!-- 		<property name="suffix" value=".html" /> -->
+<!-- 		<property name="order" value="99" /> -->
+<!-- 	</bean> -->
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="false">
+			<bean id="jacksonMessageConverter"
+				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+<!-- 				<property name="objectMapper" ref="customizedObjectMapper" /> -->
+    <property name="prefixJson" value="false" />
+    <property name="supportedMediaTypes" value="application/json" />
+			</bean>
+<!-- 			<bean class="org.springframework.http.converter.StringHttpMessageConverter"> -->
+<!-- 				<property name="supportedMediaTypes" value="text/plain;charset=UTF-8" /> -->
+<!-- 			</bean> -->
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+    <property name="warnLogCategory" value="apperror" />
+    <property name="exceptionMappings">
+        <props>
+            <prop key="java.lang.Exception">error</prop>
+        </props>
+    </property>
+</bean>
+	
+<!-- 	<mvc:resources mapping="/assets/**" location="/resources/assets/" order="2" /> -->
+<!-- 	<mvc:resources mapping="/data/**" location="/resources/data/" order="2" /> -->
+<!-- 	<mvc:resources mapping="/views/**" location="/WEB-INF/views/" order="3" /> -->
+
+</beans>

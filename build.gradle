@@ -1,0 +1,80 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+repositories { 
+
+    mavenCentral()
+}
+
+ext {
+    springVersion = '3.1.0.RELEASE'
+    jacksonVersion = '1.9.12'
+    jettyVersion = '7.6.0.v20120127'
+}
+
+sourceSets {
+
+    api {
+        java {
+            srcDir file('src/test/api')
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+
+        test.resources.srcDirs 'src/test/api'
+        
+        compileClasspath = compileClasspath + files(test.output.classesDir)
+        runtimeClasspath = output + compileClasspath
+    }
+}
+
+dependencies {
+    
+    compile 'javax.servlet:servlet-api:2.5'
+    
+    ['context', 'webmvc', 'orm', 'test'].each { module ->
+        compile "org.springframework:spring-$module:$springVersion"
+    }
+
+    compile ("org.springframework:spring-context:$springVersion"){
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    
+    compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
+    
+    testCompile 'org.apache.commons:commons-lang3:3.0'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.assertj:assertj-core:1.5.0'
+    testCompile 'org.mockito:mockito-all:1.9.5'
+    testCompile 'com.googlecode.catch-exception:catch-exception:1.2.0'
+    testCompile 'org.concordion:concordion:1.4.4'
+    testCompile 'com.jayway.restassured:rest-assured:2.0.1'
+    
+    testCompile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
+    testCompile "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+    
+    compile (
+        [group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.6.2'],
+        [group: 'ch.qos.logback', name: 'logback-core', version: '1.0.0'],
+        [group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.0']
+        )
+}
+
+jettyRun.contextPath = ''
+
+configurations {
+    apiCompile.extendsFrom testCompile
+    apiRuntime.extendsFrom testRuntime
+}
+
+task apiTest(type:Test) {
+    
+    systemProperty 'concordion.output.dir', "$buildDir/reports/api-specification"
+    description = "Run acceptance tests against REST API"
+    testClassesDir = project.sourceSets.api.output.classesDir
+    classpath = project.sourceSets.api.runtimeClasspath + files("$rootDir/src/test/api")
+
+    exclude '**/*Fixture.class'
+}
+
+test.dependsOn apiTest
