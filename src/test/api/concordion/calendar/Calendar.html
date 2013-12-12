@@ -1,6 +1,6 @@
 <html 
     xmlns:concordion="http://www.concordion.org/2007/concordion"
-    xmlns:json="http://custom">
+    xmlns:json="https://github.com/mpi/OpenTrApp">
 <body>
 
     <h1>Calendar</h1>
@@ -16,7 +16,8 @@
                 <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/calendar/2014</code></li>
                 <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
                 <li>And response should look like:
-<pre concordion:assertEquals="response()">{
+<pre json:assertIncludesJson="response()">{
+    "id": "2014",
     "months": [
         {
             "link": "/endpoints/v1/calendar/2014/01",
@@ -78,22 +79,29 @@
             </h3>
 
             <ul concordion:execute="clear()">
-                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/calendar/2014</code></li>
+                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/calendar/2014/01</code></li>
                 <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
                 <li>And response should look like:
 <pre json:assertIncludesJson="response()">{
+    "id": "2014/01",
     "days": [
         {
             "link": "/endpoints/v1/calendar/2014/01/01",
             "id": "2014/01/01",
-            "holiday": true
+            "holiday": false
         },
-        // some items...
         {
             "link": "/endpoints/v1/calendar/2014/01/02",
             "id": "2014/01/02",
             "holiday": false
+        },
+        // days...
+        {
+            "link": "/endpoints/v1/calendar/2014/01/05",
+            "id": "2014/01/05",
+            "holiday": true
         }
+        // more days...
     ]
 }</pre> 
                 </li>
@@ -109,13 +117,15 @@
                 <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/calendar/2014</code></li>
                 <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
                 <li>And response should look like:
-<pre concordion:assertEquals="response()">{
+<pre json:assertIncludesJson="response()">{
     "link": "/endpoints/v1/calendar/2014",
-    "next": "/endpoints/v1/calendar/2015",
-    "prev": "/endpoints/v1/calendar/2013",
-    "months": [
-        // months data
-    ]
+    "next": {
+        "link": "/endpoints/v1/calendar/2015"
+    },
+    "prev": {
+        "link": "/endpoints/v1/calendar/2013"
+    }
+    // months data
 }</pre> 
                 </li>
             </ul>
@@ -127,16 +137,18 @@
             </h3>
 
             <ul concordion:execute="clear()">
-                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/calendar/2014</code></li>
+                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/calendar/2014/01</code></li>
                 <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
                 <li>And response should look like:
-<pre concordion:assertEquals="response()">{
+<pre json:assertIncludesJson="response()">{
     "link": "/endpoints/v1/calendar/2014/01",
-    "next": "/endpoints/v1/calendar/2014/02",
-    "prev": "/endpoints/v1/calendar/2013/12",
-    "days": [
-        // days data
-    ]
+    "next": {
+        "link": "/endpoints/v1/calendar/2014/02"
+    },
+    "prev": {
+        "link": "/endpoints/v1/calendar/2013/12"
+    }
+    // days data
 }</pre> 
                 </li>
             </ul>

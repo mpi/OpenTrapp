@@ -17,7 +17,7 @@ public class Template implements ConcordionExtension{
         
         IncludesJsonCommand command = new IncludesJsonCommand();
         command.addAssertEqualsListener(new AssertResultRenderer());
-        concordionExtender.withCommand("http://custom", "assertIncludesJson", command);
+        concordionExtender.withCommand("https://github.com/mpi/OpenTrApp", "assertIncludesJson", command);
         concordionExtender.withLinkedCSS("/support/concordion.css", new Resource("/concordion.css"));
         concordionExtender.withDocumentParsingListener(new DocumentParsingListener() {
             
