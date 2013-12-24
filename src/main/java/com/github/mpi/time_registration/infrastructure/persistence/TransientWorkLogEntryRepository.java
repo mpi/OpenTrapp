@@ -1,13 +1,21 @@
 package com.github.mpi.time_registration.infrastructure.persistence;
 
+import static com.google.common.base.Predicates.alwaysTrue;
+import static com.google.common.base.Predicates.compose;
+import static com.google.common.base.Predicates.equalTo;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.github.mpi.time_registration.domain.ProjectName;
 import com.github.mpi.time_registration.domain.WorkLog;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 
 public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
@@ -15,12 +23,7 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
     
     @Override
     public WorkLog loadAll() {
-        return new WorkLog(){
-            @Override
-            public Iterator<WorkLogEntry> iterator() {
-                return store.iterator();
-            }
-        };
+        return new TransientWorkLog();
     }
 
     @Override
@@ -53,4 +56,27 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
         return null;
     }
 
+    private final class TransientWorkLog implements WorkLog {
+
+        private final class ExtractProjectName implements Function<WorkLogEntry, ProjectName> {
+            @Override
+            public ProjectName apply(WorkLogEntry x) {
+                return x.projectName();
+            }
+        }
+
+        private Predicate<WorkLogEntry> constraints = alwaysTrue();
+
+        @Override
+        public Iterator<WorkLogEntry> iterator() {
+            return Iterators.filter(store.iterator(), constraints);
+        }
+
+        @Override
+        public WorkLog forProject(ProjectName projectName) {
+            this.constraints = compose(equalTo(projectName), new ExtractProjectName());
+            return this;
+        }
+    }
 }
+

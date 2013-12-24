@@ -1,13 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
-import java.util.Arrays;
-import java.util.Iterator;
+public interface WorkLog extends Iterable<WorkLogEntry> {
 
-public class WorkLog implements Iterable<WorkLogEntry>{
-
-    @Override
-    public Iterator<WorkLogEntry> iterator() {
-        return Arrays.<WorkLogEntry>asList().iterator();
-    }
-
+    public WorkLog forProject(ProjectName projectName);
 }

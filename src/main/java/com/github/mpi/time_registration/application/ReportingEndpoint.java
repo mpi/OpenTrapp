@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.github.mpi.time_registration.domain.ProjectName;
+import com.github.mpi.time_registration.domain.WorkLog;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
@@ -38,10 +39,10 @@ public class ReportingEndpoint {
 
         List<WorkLogEntryJson> items = new ArrayList<ReportingEndpoint.WorkLogEntryJson>();
 
-        for (WorkLogEntry entry : repository.loadAll()) {
-            if(projectName.equals(entry.projectName().toString())){
-                items.add(new WorkLogEntryJson(entry.id(), entry.workload(), entry.projectName()));
-            }
+        WorkLog workLog = repository.loadAll().forProject(new ProjectName(projectName));
+        
+        for (WorkLogEntry entry : workLog) {
+            items.add(new WorkLogEntryJson(entry.id(), entry.workload(), entry.projectName()));
         };
         
         return new WorkLogJson(items);
