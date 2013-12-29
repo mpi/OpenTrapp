@@ -26,7 +26,7 @@ public class UpdatingFixture extends ApiFixture {
     }
     
     public void workLogEntry(String id, String workload, String projectName) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName)));
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), null));
     }
 
     public List<Entry> allWorkLogEntries() throws IllegalAccessException {

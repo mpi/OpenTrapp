@@ -70,7 +70,7 @@ public class UpdateServiceTest {
     
     private WorkLogEntry existingEntryFor(EntryID entryID) {
         
-        WorkLogEntry entry = new WorkLogEntry(entryID, Workload.of("1h"), new ProjectName("SomeProject"));
+        WorkLogEntry entry = new WorkLogEntry(entryID, Workload.of("1h"), new ProjectName("SomeProject"), new EmployeeID("homer.simpson"));
         when(repository.load(entryID)).thenReturn(entry);
         return entry;
     }

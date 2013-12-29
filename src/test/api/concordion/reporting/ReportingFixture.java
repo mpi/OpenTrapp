@@ -3,11 +3,11 @@ package concordion.reporting;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import support.ApiFixture;
 
+import com.github.mpi.time_registration.domain.EmployeeID;
 import com.github.mpi.time_registration.domain.ProjectName;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
@@ -19,8 +19,8 @@ public class ReportingFixture extends ApiFixture {
     @Autowired
     private WorkLogEntryRepository repository;
 
-    public void workLogEntry(String id, String workload, String projectName) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName)));
+    public void workLogEntry(String id, String workload, String projectName, String employee) {
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), new EmployeeID(employee)));
     }
 
     public List<Entry> allWorkLogEntries() throws IllegalAccessException {
@@ -29,9 +29,10 @@ public class ReportingFixture extends ApiFixture {
 
         for (WorkLogEntry entry : repository.loadAll()) {
             String id = entry.id().toString();
-            String workload = FieldUtils.readDeclaredField(entry, "workload", true).toString();
-            String project = FieldUtils.readDeclaredField(entry, "projectName", true).toString();
-            entries.add(new Entry(id, project, workload));
+            String workload = "" + entry.workload();
+            String project = "" + entry.projectName();
+            String employee = "" + entry.employee();
+            entries.add(new Entry(id, project, workload, employee));
         }
 
         return entries;
@@ -42,11 +43,13 @@ public class ReportingFixture extends ApiFixture {
         public String id;
         public String projectName;
         public String workload;
+        public String employee;
 
-        public Entry(String id, String project, String workload) {
+        public Entry(String id, String project, String workload, String employee) {
             this.id = id;
             this.projectName = project;
             this.workload = workload;
+            this.employee = employee;
         }
     }
 

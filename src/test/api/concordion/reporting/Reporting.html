@@ -12,12 +12,13 @@
 
             <ul concordion:execute="clear()">
                 <li>Given there are following entries
-                    <table concordion:execute="workLogEntry(#id, #workload, #projectName)">
+                    <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee)">
                         <thead>
                             <tr>
                                 <th concordion:set="#id">Id</th>
                                 <th concordion:set="#workload">Workload</th>
                                 <th concordion:set="#projectName">Project Name</th>
+                                <th concordion:set="#employee">Employee</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,21 +26,25 @@
                                 <td>WL.0001</td>
                                 <td>1h</td>
                                 <td>TheProject</td>
+                                <td>John</td>
                             </tr>
                             <tr>
                                 <td>WL.0002</td>
                                 <td>2h</td>
                                 <td>OtherProject</td>
+                                <td>John</td>
                             </tr>
                             <tr>
                                 <td>WL.0003</td>
                                 <td>3h</td>
                                 <td>TheProject</td>
+                                <td>Jane</td>
                             </tr>
                             <tr>
                                 <td>WL.0004</td>
                                 <td>4h</td>
                                 <td>YetAnotherProject</td>
+                                <td>Jane</td>
                             </tr>
                         </tbody>
                     </table>
@@ -53,13 +58,15 @@
             "link": "/endpoints/v1/work-log/entries/WL.0001",
             "id": "WL.0001",
             "workload": "1h",
-            "projectName": "TheProject"
+            "projectName": "TheProject",
+            "employee": "John"
         },
         {
             "link": "/endpoints/v1/work-log/entries/WL.0003",
             "id": "WL.0003",
             "workload": "3h",
-            "projectName": "TheProject"
+            "projectName": "TheProject",
+            "employee": "Jane"
         }
     ]
 }</pre>                
@@ -74,7 +81,7 @@
 
             <ul concordion:execute="clear()">
                 <li>Given there are following entries
-                    <table concordion:execute="workLogEntry(#id, #workload, #projectName)">
+                    <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee)">
                         <thead>
                             <tr>
                                 <th concordion:set="#id">Id</th>
@@ -120,13 +127,15 @@
             "link": "/endpoints/v1/work-log/entries/WL.0003",
             "id": "WL.0003",
             "workload": "3h",
-            "projectName": "TheProject"
+            "projectName": "TheProject",
+            "employee": "Jane"
         },
         {
             "link": "/endpoints/v1/work-log/entries/WL.0004",
             "id": "WL.0004",
-            "workload": "3h",
-            "projectName": "YetAnotherProject"
+            "workload": "4h",
+            "projectName": "YetAnotherProject",
+            "employee": "Jane"
         }
     ]
 }</pre>                

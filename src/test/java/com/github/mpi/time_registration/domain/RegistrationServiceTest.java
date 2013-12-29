@@ -44,7 +44,7 @@ public class RegistrationServiceTest {
     // --
     
     private WorkLogEntry aWorkLogEntry() {
-        return new WorkLogEntry(new EntryID("id"), Workload.of("1h"), new ProjectName("stuff"));
+        return new WorkLogEntry(new EntryID("id"), Workload.of("1h"), new ProjectName("stuff"), new EmployeeID("homer.simpson"));
     }
 
     private WorkLogEntry newEntryFor(String expression) {

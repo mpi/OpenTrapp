@@ -12,7 +12,7 @@ public class WorkLogEntryTest {
     public void shouldUpdateWorkload() throws Exception {
 
         // given:
-        WorkLogEntry entry = new WorkLogEntry(null, Workload.of("10h"), null);
+        WorkLogEntry entry = new WorkLogEntry(null, Workload.of("10h"), null, null);
         
         // when:
         entry.updateWorkload(Workload.of("12h"));
@@ -25,7 +25,7 @@ public class WorkLogEntryTest {
     public void shouldChangeProject() throws Exception {
         
         // given:
-        WorkLogEntry entry = new WorkLogEntry(null, null, new ProjectName("OldProject"));
+        WorkLogEntry entry = new WorkLogEntry(null, null, new ProjectName("OldProject"), new EmployeeID("homer.simpson"));
         
         // when:
         entry.changeProjectTo(new ProjectName("NewProject"));
@@ -35,52 +35,10 @@ public class WorkLogEntryTest {
     }
     
     @Test
-    public void shouldEntriesWithEqualData() throws Exception {
-
-        // given:
-        WorkLogEntry some = new WorkLogEntry(new EntryID("some-id"), Workload.of("30m"), project("project"));
-        WorkLogEntry same = new WorkLogEntry(new EntryID("other-id"), Workload.of("30m"), project("project"));
-        
-        // when:
-        boolean areEqual = some.hasSameDataAs(same);
-        
-        // then:
-        assertThat(areEqual).isTrue();
-    }
-
-    @Test
-    public void shouldDifferentEntriesNotBeEqual_Workload() throws Exception {
-        
-        // given:
-        WorkLogEntry some = new WorkLogEntry(new EntryID("some-id"), Workload.of("30m"), project("project"));
-        WorkLogEntry other = new WorkLogEntry(new EntryID("other-id"), Workload.of("29m"), project("project"));
-        
-        // when:
-        boolean areEqual = some.hasSameDataAs(other);
-        
-        // then:
-        assertThat(areEqual).isFalse();
-    }
-    
-    @Test
-    public void shouldDifferentEntriesNotBeEqual_ProjectName() throws Exception {
-        
-        // given:
-        WorkLogEntry some = new WorkLogEntry(new EntryID("some-id"), Workload.of("30m"), project("project"));
-        WorkLogEntry other = new WorkLogEntry(new EntryID("other-id"), Workload.of("30m"), project("meeting"));
-        
-        // when:
-        boolean areEqual = some.hasSameDataAs(other);
-        
-        // then:
-        assertThat(areEqual).isFalse();
-    }
-    
-    @Test
     public void shouldNotBeEqualToSomethigDifferentThanWorkLogEntry() throws Exception {
         
         // given:
-        WorkLogEntry some = new WorkLogEntry(new EntryID("some-id"), Workload.of("30m"), project("project"));
+        WorkLogEntry some = entryOfID("entry-id");
         
         // when:
         boolean areEqual = some.equals("30m on #project");
@@ -93,8 +51,8 @@ public class WorkLogEntryTest {
     public void shouldBeEqualIfHaveEqualIDs() throws Exception {
         
         // given:
-        WorkLogEntry some = new WorkLogEntry(new EntryID("some-id"), Workload.of("30m"), project("project-A"));
-        WorkLogEntry same = new WorkLogEntry(new EntryID("some-id"), Workload.of("35m"), project("project-B"));
+        WorkLogEntry some = entryOfID("some-id");
+        WorkLogEntry same = entryOfID("some-id");
         
         // when:
         boolean areEqual = some.equals(same);
@@ -107,8 +65,8 @@ public class WorkLogEntryTest {
     public void shouldNotBeEqualIfHaveDifferentIDs() throws Exception {
         
         // given:
-        WorkLogEntry some = new WorkLogEntry(new EntryID("some-id"), Workload.of("35m"), project("project-A"));
-        WorkLogEntry other = new WorkLogEntry(new EntryID("other-id"), Workload.of("35m"), project("project-A"));
+        WorkLogEntry some = entryOfID("some-id");
+        WorkLogEntry other = entryOfID("other-id");
         
         // when:
         boolean areEqual = some.equals(other);
@@ -121,8 +79,8 @@ public class WorkLogEntryTest {
     public void shouldHaveEqualHashCodesIfHaveEqualIDs() throws Exception {
         
         // given:
-        WorkLogEntry some = new WorkLogEntry(new EntryID("some-id"), Workload.of("30m"), project("project-A"));
-        WorkLogEntry same = new WorkLogEntry(new EntryID("some-id"), Workload.of("35m"), project("project-B"));
+        WorkLogEntry some = entryOfID("some-id");
+        WorkLogEntry same = entryOfID("some-id");
         
         // when:
         boolean areEqual = some.hashCode() == same.hashCode();
@@ -130,13 +88,13 @@ public class WorkLogEntryTest {
         // then:
         assertThat(areEqual).isTrue();
     }
-    
+
     @Test
     public void shouldNotHaveEqualHashCodesIfHaveDifferentIDs() throws Exception {
         
         // given:
-        WorkLogEntry some = new WorkLogEntry(new EntryID("some-id"), Workload.of("35m"), project("project-A"));
-        WorkLogEntry other = new WorkLogEntry(new EntryID("other-id"), Workload.of("35m"), project("project-A"));
+        WorkLogEntry some = entryOfID("some-id");
+        WorkLogEntry other = entryOfID("other-id");
         
         // when:
         boolean areEqual = some.hashCode() == other.hashCode();
@@ -151,4 +109,8 @@ public class WorkLogEntryTest {
         return new ProjectName(name);
     }
     
+    private WorkLogEntry entryOfID(String id) {
+        return new WorkLogEntry(new EntryID(id), Workload.of("30m"), project("project-A"), new EmployeeID("homer.simpson"));
+    }
 }
+

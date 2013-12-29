@@ -16,36 +16,32 @@ import org.concordion.internal.util.Announcer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-public class IncludesJsonCommand extends AbstractCommand{
+public class IncludesJsonCommand extends AbstractCommand {
 
     private Announcer<AssertEqualsListener> listeners = Announcer.to(AssertEqualsListener.class);
 
-    public IncludesJsonCommand() {
-        super();
+    public void addAssertEqualsListener(AssertEqualsListener listener) {
+        listeners.addListener(listener);
     }
 
-       public void addAssertEqualsListener(AssertEqualsListener listener) {
-            listeners.addListener(listener);
-        }
-
-        public void removeAssertEqualsListener(AssertEqualsListener listener) {
-            listeners.removeListener(listener);
-        }
+    public void removeAssertEqualsListener(AssertEqualsListener listener) {
+        listeners.removeListener(listener);
+    }
 
     public void verify(CommandCall commandCall, Evaluator evaluator, ResultRecorder resultRecorder) {
 
-           Element element = commandCall.getElement();
-           
-           String actual = (String) evaluator.evaluate(commandCall.getExpression());
-           String expected = element.getText();
+        Element element = commandCall.getElement();
 
-          if (assertIncludesJson(actual, expected)) {
-              resultRecorder.record(Result.SUCCESS);
-              announceSuccess(element);
-          } else {
-              resultRecorder.record(Result.FAILURE);
-              announceFailure(element, expected.toString(), actual);
-          }
+        String actual = (String) evaluator.evaluate(commandCall.getExpression());
+        String expected = element.getText();
+
+        if (assertIncludesJson(actual, expected)) {
+            resultRecorder.record(Result.SUCCESS);
+            announceSuccess(element);
+        } else {
+            resultRecorder.record(Result.FAILURE);
+            announceFailure(element, expected.toString(), actual);
+        }
 
     }
 
@@ -59,40 +55,39 @@ public class IncludesJsonCommand extends AbstractCommand{
 
     private boolean includesJson(JsonElement actualJson, JsonElement expectedJson) {
 
-        if(expectedJson.isJsonObject()){
-    
-            if(!actualJson.isJsonObject()){
+        if (expectedJson.isJsonObject()) {
+
+            if (!actualJson.isJsonObject()) {
                 return false;
             }
-            
+
             for (Entry<String, JsonElement> entry : expectedJson.getAsJsonObject().entrySet()) {
-                
+
                 String property = entry.getKey();
                 JsonElement expectedValue = entry.getValue();
 
-                if(!actualJson.getAsJsonObject().has(property)){
+                if (!actualJson.getAsJsonObject().has(property)) {
                     return false;
                 }
-                
+
                 JsonElement actualValue = actualJson.getAsJsonObject().get(property);
-                if(!includesJson(actualValue, expectedValue)){
+                if (!includesJson(actualValue, expectedValue)) {
                     return false;
                 }
             }
-            
+
             return true;
         }
-        
-        if(expectedJson.isJsonArray()){
 
-            if(!actualJson.isJsonArray()){
+        if (expectedJson.isJsonArray()) {
+
+            if (!actualJson.isJsonArray()) {
                 return false;
             }
 
-            outer:
-            for (JsonElement expectedItem : expectedJson.getAsJsonArray()) {
-                for (JsonElement candidateItem : actualJson.getAsJsonArray()){
-                    if(includesJson(candidateItem, expectedItem)){
+            outer: for (JsonElement expectedItem : expectedJson.getAsJsonArray()) {
+                for (JsonElement candidateItem : actualJson.getAsJsonArray()) {
+                    if (includesJson(candidateItem, expectedItem)) {
                         continue outer;
                     }
                 }
@@ -100,7 +95,7 @@ public class IncludesJsonCommand extends AbstractCommand{
             }
             return true;
         }
-        
+
         return actualJson.equals(expectedJson);
 
     }
@@ -112,5 +107,5 @@ public class IncludesJsonCommand extends AbstractCommand{
     private void announceFailure(Element element, String expected, Object actual) {
         listeners.announce().failureReported(new AssertFailureEvent(element, expected, actual));
     }
-    
+
 }

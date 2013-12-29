@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.github.mpi.time_registration.domain.EmployeeID;
 import com.github.mpi.time_registration.domain.ProjectName;
 import com.github.mpi.time_registration.domain.WorkLog;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
@@ -15,6 +16,7 @@ import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
 
 public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
@@ -65,6 +67,13 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
             }
         }
 
+        private final class ExtractEmployeeID implements Function<WorkLogEntry, EmployeeID> {
+            @Override
+            public EmployeeID apply(WorkLogEntry x) {
+                return x.employee();
+            }
+        }
+
         private Predicate<WorkLogEntry> constraints = alwaysTrue();
 
         @Override
@@ -74,7 +83,13 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
         @Override
         public WorkLog forProject(ProjectName projectName) {
-            this.constraints = compose(equalTo(projectName), new ExtractProjectName());
+            this.constraints = Predicates.and(constraints, compose(equalTo(projectName), new ExtractProjectName()));
+            return this;
+        }
+
+        @Override
+        public WorkLog forEmployee(EmployeeID employeeID) {
+            this.constraints = Predicates.and(constraints, compose(equalTo(employeeID), new ExtractEmployeeID()));
             return this;
         }
     }

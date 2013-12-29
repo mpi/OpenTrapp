@@ -39,8 +39,11 @@ dependencies {
     compile ("org.springframework:spring-context:$springVersion"){
         exclude group: 'commons-logging', module: 'commons-logging'
     }
-    
+
+    compile 'cglib:cglib-nodep:2.2'
+        
     compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.5'
     compile 'com.google.guava:guava:r09'
         
     testCompile 'org.apache.commons:commons-lang3:3.0'

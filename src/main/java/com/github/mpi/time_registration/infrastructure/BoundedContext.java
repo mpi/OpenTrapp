@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import com.github.mpi.time_registration.domain.EmployeeContext;
 import com.github.mpi.time_registration.domain.EntryIDSequence;
 import com.github.mpi.time_registration.domain.RegistrationService;
 import com.github.mpi.time_registration.domain.UpdateService;
@@ -28,8 +29,8 @@ public class BoundedContext {
     
     @Autowired
     @Bean
-    public WorkLogEntryFactory workLogEntryFactory(EntryIDSequence entryIDSequence){
-        return new WorkLogEntryFactory(entryIDSequence);
+    public WorkLogEntryFactory workLogEntryFactory(EntryIDSequence entryIDSequence, EmployeeContext employeeContext){
+        return new WorkLogEntryFactory(entryIDSequence, employeeContext);
     }
     
     @Autowired

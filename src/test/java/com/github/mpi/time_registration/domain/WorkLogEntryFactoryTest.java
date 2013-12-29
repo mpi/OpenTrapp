@@ -18,13 +18,16 @@ public class WorkLogEntryFactoryTest {
 
     @Mock
     private EntryIDSequence entryIDSequence;
+    @Mock
+    private EmployeeContext employeeContext;
 
     private WorkLogEntryFactory factory;
+
 
     @Before
     public void setUp() {
 
-        factory = new WorkLogEntryFactory(entryIDSequence);
+        factory = new WorkLogEntryFactory(entryIDSequence, employeeContext);
     }
     
     @Test
@@ -63,7 +66,7 @@ public class WorkLogEntryFactoryTest {
         WorkLogEntry entry = factory.newEntry("35m #unknown");
 
         // then:
-        assertThat(entry.hasSameDataAs(new WorkLogEntry(null, Workload.of("35m"), new ProjectName("unknown")))).isTrue();
+        assertThat(entry.workload()).isEqualTo(Workload.of("35m"));
     }
 
     @Test
@@ -75,11 +78,28 @@ public class WorkLogEntryFactoryTest {
         WorkLogEntry entry = factory.newEntry("35m on #Manhattan");
         
         // then:
-        assertThat(entry.hasSameDataAs(new WorkLogEntry(null, Workload.of("35m"), new ProjectName("Manhattan")))).isTrue();
+        assertThat(entry.projectName()).isEqualTo(new ProjectName("Manhattan"));
+    }
+
+    @Test
+    public void shouldAssignCurrentEmployee() throws Exception {
+
+        // given:
+        currentlyLoggedInEmployeeIs("current-employee");
+        
+        // when:
+        WorkLogEntry entry = factory.newEntry("35m on #Manhattan");
+
+        // then:
+        assertThat(entry.employee()).isEqualTo(new EmployeeID("current-employee"));
     }
     
     // --
     
+    private void currentlyLoggedInEmployeeIs(String id) {
+        when(employeeContext.employeeID()).thenReturn(new EmployeeID(id));
+    }
+
     private void nextIDFromSequenceIs(String nextID) {
         when(entryIDSequence.nextID()).thenReturn(new EntryID(nextID));
     }
