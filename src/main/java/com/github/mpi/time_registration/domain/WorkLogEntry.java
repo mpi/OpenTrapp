@@ -1,17 +1,22 @@
 package com.github.mpi.time_registration.domain;
 
+import com.github.mpi.time_registration.domain.time.Day;
+
 public class WorkLogEntry {
 
     private final EntryID id;
     private final EmployeeID employeeID;
+    private final Day day;
+    
     private Workload workload;
     private ProjectName projectName;
 
-    public WorkLogEntry(EntryID entryID, Workload workload, ProjectName projectName, EmployeeID employeeID) {
+    public WorkLogEntry(EntryID entryID, Workload workload, ProjectName projectName, EmployeeID employeeID, Day day) {
         this.id = entryID;
         this.workload = workload;
         this.projectName = projectName;
         this.employeeID = employeeID;
+        this.day = day;
     }
 
     public EntryID id() {
@@ -30,6 +35,10 @@ public class WorkLogEntry {
         return employeeID;
     }
 
+    public Day day() {
+        return day;
+    }
+    
     public void updateWorkload(Workload newWorkload) {
         this.workload = newWorkload;
     }

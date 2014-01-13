@@ -37,7 +37,7 @@ public abstract class WorkLogEntryRepositoryContractTest {
     
         // given:
         EntryID id = entryID("entry-id");
-        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), new ProjectName("Manhattan"), new EmployeeID("homer.simpson"));
+        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), new ProjectName("Manhattan"), new EmployeeID("homer.simpson"), null);
     
         // when:
         repository.store(entry);
@@ -82,7 +82,7 @@ public abstract class WorkLogEntryRepositoryContractTest {
     }
 
     private WorkLogEntry newEntryWithId(EntryID id) {
-        return new WorkLogEntry(id, Workload.of("66h"), new ProjectName("doesn't matter"), new EmployeeID("homer.simpson"));
+        return new WorkLogEntry(id, Workload.of("66h"), new ProjectName("doesn't matter"), new EmployeeID("homer.simpson"), null);
     }
 
     private EntryID entryID(String id) {

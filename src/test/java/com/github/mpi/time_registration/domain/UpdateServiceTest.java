@@ -1,6 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.time.Day;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateServiceTest {
@@ -70,7 +71,7 @@ public class UpdateServiceTest {
     
     private WorkLogEntry existingEntryFor(EntryID entryID) {
         
-        WorkLogEntry entry = new WorkLogEntry(entryID, Workload.of("1h"), new ProjectName("SomeProject"), new EmployeeID("homer.simpson"));
+        WorkLogEntry entry = new WorkLogEntry(entryID, Workload.of("1h"), new ProjectName("SomeProject"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
         when(repository.load(entryID)).thenReturn(entry);
         return entry;
     }

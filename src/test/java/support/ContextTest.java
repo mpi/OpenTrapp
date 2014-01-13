@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
 import com.github.mpi.time_registration.infrastructure.BoundedContext;
 
@@ -42,7 +43,7 @@ public class ContextTest {
     // --
     
     private AutowireCapableBeanFactory beanFactory() {
-        AnnotationConfigApplicationContext adHocAutowiringContext = new AnnotationConfigApplicationContext(AutowiredAnnotationBeanPostProcessor.class);
+        AbstractApplicationContext adHocAutowiringContext = new AnnotationConfigApplicationContext(AutowiredAnnotationBeanPostProcessor.class);
         adHocAutowiringContext.setParent(Context.get(server.server));
         AutowireCapableBeanFactory beanFactory = adHocAutowiringContext.getAutowireCapableBeanFactory();
         return beanFactory;

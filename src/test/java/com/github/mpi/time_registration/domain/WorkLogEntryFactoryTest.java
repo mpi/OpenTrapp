@@ -1,8 +1,6 @@
 package com.github.mpi.time_registration.domain;
 
-import static com.googlecode.catchexception.CatchException.catchException;
-import static com.googlecode.catchexception.CatchException.caughtException;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -12,95 +10,80 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.time.Day;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkLogEntryFactoryTest {
-
+    
     @Mock
-    private EntryIDSequence entryIDSequence;
+    private EntryIDSequence sequence;
     @Mock
     private EmployeeContext employeeContext;
 
     private WorkLogEntryFactory factory;
 
-
     @Before
     public void setUp() {
-
-        factory = new WorkLogEntryFactory(entryIDSequence, employeeContext);
+        factory = new WorkLogEntryFactory(sequence, employeeContext);
     }
     
+    @Test
+    public void shouldCreateWorkLogEntry() throws Exception {
+        
+        // given:
+        // when:
+        WorkLogEntry workLogEntry = factory.newEntry("2h 13m", "ProjectManhattan");
+        
+        // then:
+        assertThat(workLogEntry.projectName()).isEqualTo(new ProjectName("ProjectManhattan"));
+        assertThat(workLogEntry.workload()).isEqualTo(Workload.of("2h 13m"));
+    }
+
     @Test
     public void shouldAssignNextIdFromSequence() throws Exception {
-
+        
         // given:
-        nextIDFromSequenceIs("next-id");
+        nextSequenceIDIs("nextId");
         
         // when:
-        WorkLogEntry entry = factory.newEntry("1m on #nothing");
+        WorkLogEntry workLogEntry = factory.newEntry("2h 13m", "ProjectManhattan");
         
         // then:
-        assertThat(entry.id()).isEqualTo(new EntryID("next-id"));
+        assertThat(workLogEntry.id()).isEqualTo(new EntryID("nextId"));
     }
 
     @Test
-    public void shouldFailMeaningfullyIfInvalidExpression() throws Exception {
-        
+    public void shouldCreateEntryInContextOfEmployee() throws Exception {
+
         // given:
+        currentEmployeeIs("Bart.Simpson");
         
         // when:
-        catchException(factory).newEntry("this is invalid");
+        WorkLogEntry entry = factory.newEntry("1h", "ProjectManhattan");
         
         // then:
-        assertThat(caughtException())
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid expression: 'this is invalid'");
+        assertThat(entry.employee()).isEqualTo(new EmployeeID("Bart.Simpson"));
     }
     
     @Test
-    public void shouldParseWorkload() throws Exception {
-
-        // given:
-        
-        // when:
-        WorkLogEntry entry = factory.newEntry("35m #unknown");
-
-        // then:
-        assertThat(entry.workload()).isEqualTo(Workload.of("35m"));
-    }
-
-    @Test
-    public void shouldParseProjectName() throws Exception {
+    public void shouldCreateEntryForGivenDay() throws Exception {
         
         // given:
-        
         // when:
-        WorkLogEntry entry = factory.newEntry("35m on #Manhattan");
+        WorkLogEntry entry = factory.newEntry("1h", "ProjectManhattan", "2013/11/05");
         
         // then:
-        assertThat(entry.projectName()).isEqualTo(new ProjectName("Manhattan"));
-    }
-
-    @Test
-    public void shouldAssignCurrentEmployee() throws Exception {
-
-        // given:
-        currentlyLoggedInEmployeeIs("current-employee");
-        
-        // when:
-        WorkLogEntry entry = factory.newEntry("35m on #Manhattan");
-
-        // then:
-        assertThat(entry.employee()).isEqualTo(new EmployeeID("current-employee"));
+        assertThat(entry.day()).isEqualTo(Day.of("2013/11/05"));
     }
     
     // --
     
-    private void currentlyLoggedInEmployeeIs(String id) {
-        when(employeeContext.employeeID()).thenReturn(new EmployeeID(id));
+    private void currentEmployeeIs(String currentEmployee) {
+        when(employeeContext.employeeID()).thenReturn(new EmployeeID(currentEmployee));
     }
 
-    private void nextIDFromSequenceIs(String nextID) {
-        when(entryIDSequence.nextID()).thenReturn(new EntryID(nextID));
+    private void nextSequenceIDIs(String nextID) {
+        when(sequence.nextID()).thenReturn(new EntryID(nextID));
     }
+    
 }

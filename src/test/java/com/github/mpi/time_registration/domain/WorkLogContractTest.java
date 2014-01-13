@@ -4,13 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-import com.github.mpi.time_registration.domain.EmployeeID;
-import com.github.mpi.time_registration.domain.ProjectName;
-import com.github.mpi.time_registration.domain.WorkLog;
-import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
-import com.github.mpi.time_registration.domain.Workload;
+import com.github.mpi.time_registration.domain.time.Day;
 
 public abstract class WorkLogContractTest {
 
@@ -95,8 +90,43 @@ public abstract class WorkLogContractTest {
         assertThat(workLog).containsExactly(relevantEntry);
     }
     
+    @Test
+    public void shouldReturnWorkLogBeforeDayOnly() throws Exception {
+
+        WorkLogEntry beforeValentines = anEntryOnDay("Before Valentine's Day", Day.of("2014/02/01"));
+        WorkLogEntry valentines = anEntryOnDay("On Valentine's Day", Day.of("2014/02/14"));
+        WorkLogEntry afterValentines = anEntryOnDay("After Valentine's Day", Day.of("2014/02/24"));
+
+        // given:
+        repositoryContainsFollowingEntries(beforeValentines, valentines, afterValentines);
+        // when:
+        WorkLog log = repository.loadAll().before(Day.of("2014/02/14"));
+        // then:
+        assertThat(log).containsOnly(valentines, beforeValentines);
+    }
+    
+    @Test
+    public void shouldReturnWorkLogAfterDayOnly() throws Exception {
+        
+        WorkLogEntry beforeValentines = anEntryOnDay("Before Valentine's Day", Day.of("2014/02/01"));
+        WorkLogEntry valentines = anEntryOnDay("On Valentine's Day", Day.of("2014/02/14"));
+        WorkLogEntry afterValentines = anEntryOnDay("After Valentine's Day", Day.of("2014/02/24"));
+        
+        // given:
+        repositoryContainsFollowingEntries(beforeValentines, valentines, afterValentines);
+        // when:
+        WorkLog log = repository.loadAll().after(Day.of("2014/02/14"));
+        // then:
+        assertThat(log).containsOnly(valentines, afterValentines);
+    }
+    
     // --
     
+    private WorkLogEntry anEntryOnDay(String id, Day day) {
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("Lovelas"), day);
+        
+    }
+
     private void repositoryContainsFollowingEntries(WorkLogEntry... entries) {
         for (WorkLogEntry entry : entries) {
             repository.store(entry);
@@ -104,11 +134,11 @@ public abstract class WorkLogContractTest {
     }
 
     private WorkLogEntry anEntryForEmployee(String id, String employee) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID(employee));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID(employee), Day.of("2014/01/01"));
     }
 
     private WorkLogEntry anEntryForEmployeeAndProject(String id, String employee, String projectName) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName(projectName), new EmployeeID(employee));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName(projectName), new EmployeeID(employee), Day.of("2014/01/01"));
     }
 
     private WorkLogEntry anEntryWithProject(String id, String projectName) {
@@ -118,7 +148,7 @@ public abstract class WorkLogContractTest {
     }
 
     private WorkLogEntry anEntry(String id) {
-        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("homer.simpson"));
+        return new WorkLogEntry(new EntryID(id), Workload.of("50m"), new ProjectName("projectA"), new EmployeeID("homer.simpson"), Day.of("2014/01/01"));
     }
 
 }

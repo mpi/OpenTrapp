@@ -16,7 +16,7 @@ public class RegistrationFixture extends ApiFixture {
     private WorkLogEntryRepository repository;
 
     public void successfulRequest() {
-        body("{\"workLogExpression\":\"2h 30m on #SomeProject\"}");
+        body("{\"workload\":\"2h 30m\", \"projectName\":\"SomeProject\", \"day\":\"2014/01/01\"}");
         request("POST", "/endpoints/v1/employee/Homer/work-log/entries");
     }
 
@@ -28,7 +28,8 @@ public class RegistrationFixture extends ApiFixture {
             String workload = "" + entry.workload();
             String project = "" + entry.projectName();
             String employee = "" + entry.employee();
-            entries.add(new Entry(project, workload, employee));
+            String day = "" + entry.day();
+            entries.add(new Entry(project, workload, employee, day));
         }
 
         return entries;
@@ -39,11 +40,13 @@ public class RegistrationFixture extends ApiFixture {
         public String project;
         public String workload;
         public String employee;
+        public String day;
 
-        public Entry(String project, String workload, String employee) {
+        public Entry(String project, String workload, String employee, String day) {
             this.project = project;
             this.workload = workload;
             this.employee = employee;
+            this.day = day;
         }
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostP
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 
 import com.github.mpi.time_registration.infrastructure.BoundedContext;
 
@@ -39,7 +40,7 @@ public class ApiTestSuite {
     }
 
     private static AutowireCapableBeanFactory adHocInjector() {
-        AnnotationConfigApplicationContext adHocAutowiringContext 
+        AbstractApplicationContext adHocAutowiringContext 
             = new AnnotationConfigApplicationContext(AutowiredAnnotationBeanPostProcessor.class);
         adHocAutowiringContext.setParent(ApiTestSuite.context());
         return adHocAutowiringContext.getAutowireCapableBeanFactory();

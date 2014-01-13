@@ -41,7 +41,8 @@ public class RegistrationEndpoint {
             
             context.enter(new EmployeeID(employeeID));
             
-            service.submit(form.workLogExpression);
+            service.submit(form.workload, form.projectName, form.day);
+                
             response.setHeader("Location", link);
             
         } catch (IllegalArgumentException e) {
@@ -72,7 +73,7 @@ public class RegistrationEndpoint {
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     static class Form{
 
-        String workLogExpression;
+        String projectName, workload, day;
     }
 
     @ResponseStatus(BAD_REQUEST)
@@ -85,4 +86,3 @@ public class RegistrationEndpoint {
         }
     }
 }
-

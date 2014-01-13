@@ -10,8 +10,8 @@ public class RegistrationService {
         this.repository = repository;
     }
 
-    public void submit(String expression) {
-        WorkLogEntry newEntry = factory.newEntry(expression);
+    public void submit(String workload, String projectName, String day) {
+        WorkLogEntry newEntry = factory.newEntry(workload, projectName, day);
         repository.store(newEntry);
     }
 
