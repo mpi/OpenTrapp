@@ -35,6 +35,9 @@ dependencies {
     ['context', 'webmvc', 'orm', 'test'].each { module ->
         compile "org.springframework:spring-$module:$springVersion"
     }
+    ['core', 'web', 'config', 'openid'].each { module ->
+        compile "org.springframework.security:spring-security-$module:$springVersion"
+    }
 
     compile ("org.springframework:spring-context:$springVersion"){
         exclude group: 'commons-logging', module: 'commons-logging'
@@ -47,6 +50,7 @@ dependencies {
     compile 'com.google.guava:guava:r09'
     compile 'org.apache.commons:commons-lang3:3.0'
         
+    
     testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:1.5.0'
     testCompile 'org.mockito:mockito-all:1.9.5'

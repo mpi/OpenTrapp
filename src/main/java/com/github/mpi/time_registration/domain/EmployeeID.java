@@ -3,11 +3,6 @@ package com.github.mpi.time_registration.domain;
 public class EmployeeID {
 
     private final String id;
-
-    protected EmployeeID() {
-        // FIXME: cglib requires default constructor in order to proxy given class
-        this("this is for cglib only");
-    }
     
     public EmployeeID(String id) {
         this.id = id;

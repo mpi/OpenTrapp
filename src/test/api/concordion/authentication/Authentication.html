@@ -1,0 +1,60 @@
+<html 
+    xmlns:concordion="http://www.concordion.org/2007/concordion"
+    xmlns:json="https://github.com/mpi/OpenTrApp">
+<body>
+
+    <h1>Authentication</h1>
+
+    <div class="examples">
+        <div class="example">
+            <h3>
+                <u>Example 1</u>: Authentication status (not logged in)
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/authentication/status</code></li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
+                <li>And response should look like:
+<pre json:assertIncludesJson="response()">{
+    "displayName": "Anonymous",    
+    "authenticated": false,    
+    "loginUrl": "/endpoints/v1/authentication/login"
+}</pre></li>
+            </ul>
+        </div>
+        <div class="example">
+            <h3>
+                <u>Example 2</u>: Authentication status (logged in)
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>Given user is logged in as <span concordion:execute="loggedInAs(#displayName, #username)">
+                <b concordion:set="#displayName">Homer Simpson</b> with username 
+                <b concordion:set="#username">homer.simpson@springfield.com</b></span></li> 
+                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/authentication/status</code></li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
+                <li>And response should look like:
+<pre json:assertIncludesJson="response()">{
+    "username": "homer.simpson@springfield.com",
+    "displayName": "Homer Simpson",    
+    "authenticated": true,    
+    "logoutsUrl": "/endpoint/v1/authentication/logout"
+}</pre></li>
+            </ul>
+        </div>
+        <div class="example">
+            <h3>
+                <u>Example 3</u>: Logging in
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/authentication/login</code></li>
+                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 302 Found</b></li>
+                <li>And response body should contain following <b concordion:set="#header">Location</b> header: 
+                    <pre concordion:assertEquals="headerContent(#header)" style="word-wrap:break-word;">Location: https://www.google.com/accounts/o8/ud?openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&amp;openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&amp;openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&amp;openid.return_to=http%3A%2F%2Flocalhost%3A8080%2Fendpoints%2Fv1%2Fauthentication%2Flogin&amp;openid.realm=http%3A%2F%2Flocalhost%3A8080%2F&amp;openid.assoc_handle=1.AMlYA9UwOLOzyK24FUTMf2nUYJDHHpkK54l0q6sZdR7wRfbHXxPdSM3-AOiNymR7IlXsoIaIxiuR7Q&amp;openid.mode=checkid_setup&amp;openid.ns.ext1=http%3A%2F%2Fopenid.net%2Fsrv%2Fax%2F1.0&amp;openid.ext1.mode=fetch_request&amp;openid.ext1.type.Email=http%3A%2F%2Fschema.openid.net%2Fcontact%2Femail&amp;openid.ext1.type.FirstName=http%3A%2F%2Faxschema.org%2FnamePerson%2Ffirst&amp;openid.ext1.type.LastName=http%3A%2F%2Faxschema.org%2FnamePerson%2Flast&amp;openid.ext1.required=Email%2CFirstName%2CLastName</pre>
+                </li>
+            </ul>
+        </div>        
+    </div>
+</body>
+</html>

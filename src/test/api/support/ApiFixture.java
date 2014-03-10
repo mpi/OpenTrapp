@@ -18,8 +18,8 @@ public class ApiFixture {
     @Autowired
     private PersistenceBoundedContext context;
     
-    private RequestSpecification request;
-    private Response response;
+    protected RequestSpecification request;
+    protected Response response;
 
     public void clear() {
         
