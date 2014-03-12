@@ -17,6 +17,8 @@ public class EmbeddedServer {
 
     public void start() {
         
+        enableProfiles();
+        
         System.err.println("-------------- Starting Embedded Server for Integration Tests...");
         
         try {
@@ -24,6 +26,16 @@ public class EmbeddedServer {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    private void enableProfiles() {
+        
+        System.setProperty("spring.profiles.active","acceptance-tests");
+
+        System.err.println("-------------------------------");
+        System.err.println(String.format("    Using profiles: %s ", System.getProperty("spring.profiles.active")));
+        System.err.println("-------------------------------");
+
     }
 
     void awaitShutdown() {

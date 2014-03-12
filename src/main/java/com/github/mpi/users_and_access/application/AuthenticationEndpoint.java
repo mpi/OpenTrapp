@@ -5,34 +5,32 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.github.mpi.users_and_access.infrastructure.spring.OpenIDUserService;
-import com.github.mpi.users_and_access.infrastructure.spring.OpenIDUserService.OpenIDUser;
+import com.github.mpi.users_and_access.domain.SecurityContext;
+import com.github.mpi.users_and_access.domain.User;
 
 @Controller
 public class AuthenticationEndpoint {
 
+    @Autowired
+    private SecurityContext securityContext;
+    
     @RequestMapping(
             method   = GET,           
             value    = "/endpoints/v1/authentication/status")
     @ResponseStatus(OK)
     public @ResponseBody AuthenticationStatus status(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
-        boolean isAuthenticated = authentication.getPrincipal() instanceof OpenIDUserService.OpenIDUser;
-        String fullName = "Anonymous";
-        if(isAuthenticated){
-            OpenIDUserService.OpenIDUser details = (OpenIDUser) authentication.getPrincipal();
-            fullName = details.getFullName();
-        }
+        User authenticatedUser = securityContext.authenticatedUser();
         
-        return new AuthenticationStatus(authentication.getName(), fullName, isAuthenticated);
+        boolean isAuthenticated = !User.ANONYMOUS.equals(authenticatedUser);
+        
+        return new AuthenticationStatus(authenticatedUser.username(), authenticatedUser.displayName(), isAuthenticated);
     }
     
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)

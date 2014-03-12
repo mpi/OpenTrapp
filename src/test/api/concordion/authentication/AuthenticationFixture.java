@@ -1,66 +1,32 @@
 package concordion.authentication;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import support.ApiFixture;
 
-import com.github.mpi.users_and_access.infrastructure.spring.OpenIDUserService;
+import com.github.mpi.users_and_access.domain.User;
+import com.github.mpi.users_and_access.infrastructure.global.GlobalSecurityContext;
 
 public class AuthenticationFixture extends ApiFixture {
 
+    @Autowired
+    private GlobalSecurityContext securityContext;
+    
     public void get(String location){
         response = request.redirects().follow(false).when().get(location);
         response.prettyPrint();
     }
-
     
     public void loggedInAs(final String displayName, final String username){
-        
-        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_GLOBAL);
-        SecurityContextHolder.getContext().setAuthentication(new Authentication() {
-            
-            private static final long serialVersionUID = -1L;
+        securityContext.set(new User(username, displayName));
+    }
+    
+    public void unauthenticated(){
+        securityContext.clear();
+    }
 
-            @Override
-            public String getName() {
-                return username;
-            }
-            
-            @Override
-            public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-            }
-            
-            @Override
-            public boolean isAuthenticated() {
-                return true;
-            }
-            
-            @Override
-            public Object getPrincipal() {
-                return new OpenIDUserService.OpenIDUser(username, displayName);
-            }
-            
-            @Override
-            public Object getDetails() {
-                return null;
-            }
-            
-            @Override
-            public Object getCredentials() {
-                return null;
-            }
-            
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return Arrays.asList(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
-            }
-        });
+    public void authenticated(){
+        loggedInAs("Homer Simpson", "homer.simpson@springfield.com");
     }
     
 }

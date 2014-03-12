@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.mpi.time_registration.infrastructure.persistence.PersistenceBoundedContext;
+import com.github.mpi.users_and_access.domain.User;
+import com.github.mpi.users_and_access.infrastructure.global.GlobalSecurityContext;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -16,14 +18,18 @@ import com.jayway.restassured.specification.RequestSpecification;
 public class ApiFixture {
 
     @Autowired
-    private PersistenceBoundedContext context;
+    private PersistenceBoundedContext persistenceContext;
+    
+    @Autowired
+    private GlobalSecurityContext securityContext;
     
     protected RequestSpecification request;
     protected Response response;
 
     public void clear() {
         
-        context.clear();
+        persistenceContext.clear();
+        securityContext.set(new User("Homer Simpson", "homer.simpson@springfield.com"));
         
         request = given()
                     .log().all()

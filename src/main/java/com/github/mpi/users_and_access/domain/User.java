@@ -2,6 +2,8 @@ package com.github.mpi.users_and_access.domain;
 
 public class User {
 
+    public static final User ANONYMOUS = new User("Anonymous", "Anonymous");
+    
     private final String username;
     private final String displayName;
 
@@ -29,5 +31,13 @@ public class User {
     @Override
     public String toString() {
         return String.format("%s<%s>", displayName, username);
+    }
+
+    public String username() {
+        return username;
+    }
+
+    public String displayName() {
+        return displayName;
     }
 }
