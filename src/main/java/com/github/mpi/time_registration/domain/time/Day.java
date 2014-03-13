@@ -11,6 +11,10 @@ public class Day {
 
     public static Day of(String date) {
 
+        if(date == null){
+            throw new IllegalArgumentException("Invalid date: null");
+        }
+        
         Matcher matcher = DATE_FORMAT.matcher(date);
 
         if (!matcher.matches()) {

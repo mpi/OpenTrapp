@@ -52,6 +52,22 @@ public class DayTest extends ValueObjectContractTest{
     }
 
     @Test
+    public void shouldFailMeaningfullyOnNullDate() throws Exception {
+        
+        // given:
+        try{
+            // when:
+            Day.of(null);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch(Exception e){
+            // then:
+            assertThat(e)
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Invalid date: null");
+        }
+    }
+    
+    @Test
     public void shouldHaveDescriptiveToString() throws Exception {
         
         // given:

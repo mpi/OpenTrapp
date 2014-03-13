@@ -31,14 +31,14 @@ public class ReportingEndpoint {
     @Autowired
     private WorkLogEntryRepository repository;
     
-    @RequestMapping("/projects/{projectName:.+}/work-log/entries")
+    @RequestMapping("/projects/{projectName}/work-log/entries")
     public @ResponseBody WorkLogJson projectWorkLog(@PathVariable String projectName){
 
         WorkLog workLog = repository.loadAll().forProject(new ProjectName(projectName));
         return jsonResponse(workLog);
     }
 
-    @RequestMapping( "/employee/{employeeID:.+}/work-log/entries")
+    @RequestMapping("/employee/{employeeID}/work-log/entries")
     public @ResponseBody WorkLogJson employeeWorkLog(@PathVariable String employeeID){
 
         WorkLog workLog = repository.loadAll().forEmployee(new EmployeeID(employeeID));
