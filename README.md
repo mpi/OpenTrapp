@@ -1,6 +1,8 @@
 OpenTrApp
 =========
 
+[![Build Status](https://secure.travis-ci.org/Pragmatists/OpenTrApp.png)](http://travis-ci.org/Pragmatists/OpenTrApp)
+
 Open Time Registration Application
 
 In order to build:
