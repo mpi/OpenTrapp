@@ -1,4 +1,4 @@
-package com.github.mpi.infrastructure;
+package com.github.mpi.infrastructure.mongo;
 
 import java.util.Properties;
 

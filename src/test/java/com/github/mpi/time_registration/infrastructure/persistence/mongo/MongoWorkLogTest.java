@@ -1,4 +1,4 @@
-package com.github.mpi.time_registration.infrastructure.persistence;
+package com.github.mpi.time_registration.infrastructure.persistence.mongo;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -8,21 +8,23 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.github.mpi.infrastructure.DevelopmentProfile;
-import com.github.mpi.infrastructure.MongoContext;
-import com.github.mpi.infrastructure.MongoLabProfile;
+import com.github.mpi.infrastructure.mongo.MongoContext;
+import com.github.mpi.infrastructure.mongo.MongoDevelopmentDatabase;
+import com.github.mpi.infrastructure.mongo.MongoDevelopmentProfile;
+import com.github.mpi.infrastructure.mongo.MongoLabProfile;
+import com.github.mpi.time_registration.domain.WorkLogContractTest;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepositoryContractTest;
+import com.github.mpi.time_registration.infrastructure.persistence.mongo.MongoWorkLogEntryRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={
         MongoContext.class, 
         MongoLabProfile.class, 
-        DevelopmentProfile.class, 
+        MongoDevelopmentProfile.class, 
         MongoDevelopmentDatabase.class
 })
-@ActiveProfiles({"mongo", "development"})
-public class MongoWorkLogEntryRepositoryTest extends WorkLogEntryRepositoryContractTest{
+@ActiveProfiles({"mongo", "mongo-dev"})
+public class MongoWorkLogTest extends WorkLogContractTest{
 
     @Autowired
     private MongoTemplate mongo;
@@ -32,5 +34,4 @@ public class MongoWorkLogEntryRepositoryTest extends WorkLogEntryRepositoryContr
         repository = new MongoWorkLogEntryRepository(mongo);
         mongo.dropCollection(WorkLogEntry.class);
     }
-    
 }

@@ -1,4 +1,4 @@
-package com.github.mpi.time_registration.infrastructure.persistence;
+package com.github.mpi.time_registration.infrastructure.persistence.mongo;
 
 import java.util.Iterator;
 

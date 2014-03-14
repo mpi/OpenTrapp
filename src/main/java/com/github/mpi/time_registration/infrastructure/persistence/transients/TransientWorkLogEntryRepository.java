@@ -1,4 +1,4 @@
-package com.github.mpi.time_registration.infrastructure.persistence;
+package com.github.mpi.time_registration.infrastructure.persistence.transients;
 
 import static com.google.common.base.Predicates.alwaysTrue;
 import static com.google.common.base.Predicates.compose;

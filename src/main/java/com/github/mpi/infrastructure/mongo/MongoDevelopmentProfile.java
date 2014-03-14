@@ -1,4 +1,4 @@
-package com.github.mpi.infrastructure;
+package com.github.mpi.infrastructure.mongo;
 
 import java.util.Properties;
 
@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("development")
-public class DevelopmentProfile {
+@Profile("mongo-dev")
+public class MongoDevelopmentProfile {
 
     @Bean
     public PropertyPlaceholderConfigurer developmentPreferences(){

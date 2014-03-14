@@ -1,4 +1,4 @@
-package com.github.mpi.infrastructure;
+package com.github.mpi.infrastructure.mongo;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

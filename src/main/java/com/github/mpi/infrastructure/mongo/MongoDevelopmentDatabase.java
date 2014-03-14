@@ -1,5 +1,4 @@
-package com.github.mpi.time_registration.infrastructure.persistence;
-import groovy.lang.Singleton;
+package com.github.mpi.infrastructure.mongo;
 
 import java.io.IOException;
 
@@ -7,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
@@ -15,8 +15,8 @@ import de.flapdoodle.embed.mongo.config.MongodConfig;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
 
-@Profile("development")
-@Singleton
+@Component
+@Profile("mongo-dev")
 public class MongoDevelopmentDatabase {
 
     private static MongodExecutable mongodExe;
