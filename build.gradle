@@ -8,6 +8,7 @@ repositories {
 
 ext {
     springVersion = '3.2.8.RELEASE'
+    springSecurityVersion = '3.1.0.RELEASE'
     springDataVersion = '1.0.4.RELEASE'
     jacksonVersion = '1.9.12'
     jettyVersion = '7.6.0.v20120127'
@@ -37,7 +38,7 @@ dependencies {
         compile "org.springframework:spring-$module:$springVersion"
     }
     ['core', 'web', 'config', 'openid'].each { module ->
-        compile "org.springframework.security:spring-security-$module:$springVersion"
+        compile "org.springframework.security:spring-security-$module:$springSecurityVersion"
     }
 
     compile ("org.springframework:spring-context:$springVersion"){
@@ -89,3 +90,7 @@ task apiTest(type:Test) {
 }
 
 test.dependsOn apiTest
+test {
+    scanForTestClasses = true
+    exclude '**/*Setup'
+}

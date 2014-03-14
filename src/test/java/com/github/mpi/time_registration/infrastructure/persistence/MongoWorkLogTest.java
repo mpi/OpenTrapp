@@ -11,8 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.github.mpi.infrastructure.DevelopmentProfile;
 import com.github.mpi.infrastructure.MongoContext;
 import com.github.mpi.infrastructure.MongoLabProfile;
+import com.github.mpi.time_registration.domain.WorkLogContractTest;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepositoryContractTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={
@@ -22,7 +22,7 @@ import com.github.mpi.time_registration.domain.WorkLogEntryRepositoryContractTes
         MongoDevelopmentDatabase.class
 })
 @ActiveProfiles({"mongo", "development"})
-public class MongoWorkLogEntryRepositoryTest extends WorkLogEntryRepositoryContractTest{
+public class MongoWorkLogTest extends WorkLogContractTest{
 
     @Autowired
     private MongoTemplate mongo;
@@ -32,5 +32,4 @@ public class MongoWorkLogEntryRepositoryTest extends WorkLogEntryRepositoryContr
         repository = new MongoWorkLogEntryRepository(mongo);
         mongo.dropCollection(WorkLogEntry.class);
     }
-    
 }
