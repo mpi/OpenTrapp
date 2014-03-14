@@ -30,7 +30,8 @@ public class EmbeddedServer {
     
     private void enableProfiles() {
         
-        System.setProperty("spring.profiles.active","acceptance-tests");
+//        System.setProperty("spring.profiles.active","acceptance-tests");
+        System.setProperty("spring.profiles.active","spring-security");
 
         System.err.println("-------------------------------");
         System.err.println(String.format("    Using profiles: %s ", System.getProperty("spring.profiles.active")));

@@ -10,4 +10,6 @@
 	<context:component-scan base-package="com.github.mpi.users_and_access.application" />
 	<context:component-scan base-package="com.github.mpi.users_and_access.infrastructure" />
 	
+	<import resource="classpath:com/github/mpi/users_and_access/infrastructure/fake-security-context.xml" />
+	
 </beans>

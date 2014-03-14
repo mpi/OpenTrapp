@@ -15,6 +15,12 @@ import org.springframework.security.openid.OpenIDAuthenticationFilter;
 
 public class FixedOpenIDProviderFilter implements Filter{
 
+    private String providerUrl;
+
+    public void setProviderUrl(String providerUrl) {
+        this.providerUrl = providerUrl;
+    }
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}
     
@@ -29,6 +35,7 @@ public class FixedOpenIDProviderFilter implements Filter{
 
     private final class FixedOpenIDProviderRequest extends HttpServletRequestWrapper {
 
+
         public FixedOpenIDProviderRequest(ServletRequest request) {
             super((HttpServletRequest) request);
         }
@@ -37,7 +44,7 @@ public class FixedOpenIDProviderFilter implements Filter{
         public String getParameter(String name) {
             
             if(OpenIDAuthenticationFilter.DEFAULT_CLAIMED_IDENTITY_FIELD.equals(name)){
-                return "https://www.google.com/accounts/o8/id?openid.ui.icon=true";
+                return providerUrl;
             }
             
             return super.getParameter(name);

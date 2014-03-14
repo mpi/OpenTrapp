@@ -11,6 +11,7 @@
 			    <property name="prefixJson" value="false" />
 			    <property name="supportedMediaTypes" value="application/json" />
 			</bean>
+			<bean id="xrdsMessageConverter" class="com.github.mpi.users_and_access.infrastructure.global.XrdsMessageConverter"/>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	
