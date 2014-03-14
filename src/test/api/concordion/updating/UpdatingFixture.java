@@ -34,12 +34,17 @@ public class UpdatingFixture extends ApiFixture {
     }
     
     public boolean entryExists(String id) {
-        return repository.load(new EntryID(id)) != null;
+        try {
+            repository.load(new EntryID(id));
+            return true;
+        } catch (WorkLogEntryRepository.WorkLogEntryDoesNotExists e) {
+            return false;
+        }
     }
 
     public List<Entry> allWorkLogEntries() throws IllegalAccessException {
 
-        List<Entry> entries = new ArrayList<Entry>();
+        List<Entry> entries = new ArrayList<>();
 
         for (WorkLogEntry entry : repository.loadAll()) {
             String id = entry.id().toString();

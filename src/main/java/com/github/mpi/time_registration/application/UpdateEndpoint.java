@@ -2,11 +2,13 @@ package com.github.mpi.time_registration.application;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class UpdateEndpoint {
 
     @Autowired
     private UpdateService service;
+
+    @Autowired
+    private WorkLogEntryRepository repository;
     
     @RequestMapping(
             method   = POST, 
@@ -45,6 +50,14 @@ public class UpdateEndpoint {
         setLocation(response, "/endpoints/v1/work-log/entries/%s", id);
         
         return "{\"status\": \"sucess\"}";
+    }
+
+    @RequestMapping(
+            method   = DELETE,
+            value    = "/endpoints/v1/work-log/entries/{id:.+}")
+    @ResponseStatus(NO_CONTENT)
+    public void deleteEntry(@PathVariable String id) {
+        repository.delete(new EntryID(id));
     }
 
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
