@@ -11,8 +11,8 @@ public class WorkLogEntry {
     private Workload workload;
     private ProjectName projectName;
 
-    public WorkLogEntry(EntryID entryID, Workload workload, ProjectName projectName, EmployeeID employeeID, Day day) {
-        this.id = entryID;
+    public WorkLogEntry(EntryID id, Workload workload, ProjectName projectName, EmployeeID employeeID, Day day) {
+        this.id = id;
         this.workload = workload;
         this.projectName = projectName;
         this.employeeID = employeeID;

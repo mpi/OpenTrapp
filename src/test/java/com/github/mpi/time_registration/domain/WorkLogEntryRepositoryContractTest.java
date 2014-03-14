@@ -7,15 +7,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-import com.github.mpi.time_registration.domain.EmployeeID;
-import com.github.mpi.time_registration.domain.ProjectName;
-import com.github.mpi.time_registration.domain.WorkLog;
-import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryAlreadyExists;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryDoesNotExists;
-import com.github.mpi.time_registration.domain.Workload;
+import com.github.mpi.time_registration.domain.time.Day;
 
 public abstract class WorkLogEntryRepositoryContractTest {
 
@@ -37,13 +32,27 @@ public abstract class WorkLogEntryRepositoryContractTest {
     
         // given:
         EntryID id = entryID("entry-id");
-        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), new ProjectName("Manhattan"), new EmployeeID("homer.simpson"), null);
+        WorkLogEntry entry = new WorkLogEntry(id, Workload.of("25m"), new ProjectName("Manhattan"), new EmployeeID("homer.simpson"), Day.of("2014/03/14"));
     
         // when:
         repository.store(entry);
     
         // then:
         assertThat(reflectionEquals(entry, repository.load(id))).isTrue();
+    }
+
+    @Test
+    public void shouldLoadEntryByID() throws Exception {
+    
+        // given:
+        entryWithGivenIdAlreadyExists(entryID("other"));
+        WorkLogEntry expected = entryWithGivenIdAlreadyExists(entryID("expected"));
+    
+        // when:
+        WorkLogEntry actual = repository.load(expected.id());
+        
+        // then:
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -77,8 +86,10 @@ public abstract class WorkLogEntryRepositoryContractTest {
 
     // --
     
-    private void entryWithGivenIdAlreadyExists(EntryID id) {
-        repository.store(newEntryWithId(id));
+    private WorkLogEntry entryWithGivenIdAlreadyExists(EntryID id) {
+        WorkLogEntry entry = newEntryWithId(id);
+        repository.store(entry);
+        return entry;
     }
 
     private WorkLogEntry newEntryWithId(EntryID id) {
