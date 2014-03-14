@@ -33,9 +33,7 @@ public class RegistrationEndpoint {
             consumes = "application/json",
                value = "/endpoints/v1/employee/{employeeID}/work-log/entries")
     @ResponseStatus(CREATED)
-    public @ResponseBody ResponseJson submitEntry(HttpServletResponse response, @PathVariable String employeeID, @RequestBody Form form){
-
-        String link = "/endpoints/v1/work-log/entries/WL.0001";
+    public void submitEntry(HttpServletResponse response, @PathVariable String employeeID, @RequestBody Form form){
 
         try{
             
@@ -43,8 +41,6 @@ public class RegistrationEndpoint {
             
             service.submit(form.workload, form.projectName, form.day);
                 
-            response.setHeader("Location", link);
-            
         } catch (IllegalArgumentException e) {
 
             throw new InvalidExpressionException(e);
@@ -53,23 +49,9 @@ public class RegistrationEndpoint {
             
             context.leave();
         }
-        
-        return new ResponseJson("SUCCESS", link);
     }
-    
 
-    @JsonAutoDetect(fieldVisibility=Visibility.ANY)
-    class ResponseJson{
 
-        String status, link;
-
-        ResponseJson(String status, String link) {
-            this.status = status;
-            this.link = link;
-        }
-        
-    }
-    
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     static class Form{
 
