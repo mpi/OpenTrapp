@@ -5,6 +5,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.mpi.time_registration.domain.time.Day;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class ReportingEndpoint {
     private WorkLogJson jsonResponse(WorkLog workLog) {
         List<WorkLogEntryJson> items = new ArrayList<ReportingEndpoint.WorkLogEntryJson>();
         for (WorkLogEntry entry : workLog) {
-            items.add(new WorkLogEntryJson(entry.id(), entry.workload(), entry.projectName(), entry.employee()));
-        };
+            items.add(new WorkLogEntryJson(entry.id(), entry.workload(), entry.projectName(), entry.employee(), entry.day()));
+        }
         return new WorkLogJson(items);
     }
 
@@ -78,14 +79,15 @@ public class ReportingEndpoint {
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     class WorkLogEntryJson {
 
-        String link, id, workload, projectName, employee;
+        String link, id, workload, projectName, employee, day;
         
-        WorkLogEntryJson(EntryID id, Workload workload, ProjectName projectName, EmployeeID employee) {
+        WorkLogEntryJson(EntryID id, Workload workload, ProjectName projectName, EmployeeID employee, Day day) {
             this.id = id.toString();
             this.workload = workload.toString();
             this.projectName = projectName.toString();
             this.employee = employee.toString();
             this.link = String.format("/endpoints/v1/work-log/entries/%s", id);
+            this.day = day.toString();
         }
     }
 }

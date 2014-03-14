@@ -24,38 +24,4 @@ public class ReportingFixture extends ApiFixture {
         repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), new EmployeeID(employee), Day.of(day)));
     }
 
-    public void workLogEntry(String id, String workload, String projectName, String employee) {
-        repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), new EmployeeID(employee), null));
-    }
-
-    public List<Entry> allWorkLogEntries() throws IllegalAccessException {
-
-        List<Entry> entries = new ArrayList<Entry>();
-
-        for (WorkLogEntry entry : repository.loadAll()) {
-            String id = entry.id().toString();
-            String workload = "" + entry.workload();
-            String project = "" + entry.projectName();
-            String employee = "" + entry.employee();
-            entries.add(new Entry(id, project, workload, employee));
-        }
-
-        return entries;
-    }
-
-    public class Entry {
-
-        public String id;
-        public String projectName;
-        public String workload;
-        public String employee;
-
-        public Entry(String id, String project, String workload, String employee) {
-            this.id = id;
-            this.projectName = project;
-            this.workload = workload;
-            this.employee = employee;
-        }
-    }
-
 }
