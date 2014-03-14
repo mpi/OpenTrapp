@@ -1,18 +1,13 @@
 package com.github.mpi.time_registration.infrastructure.persistence.mongo;
 
-import java.util.Iterator;
-
+import com.github.mpi.time_registration.domain.*;
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.time.Day;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
-import com.github.mpi.time_registration.domain.EmployeeID;
-import com.github.mpi.time_registration.domain.ProjectName;
-import com.github.mpi.time_registration.domain.WorkLog;
-import com.github.mpi.time_registration.domain.WorkLogEntry;
-import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
-import com.github.mpi.time_registration.domain.time.Day;
+import java.util.Iterator;
 
 public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
 
@@ -45,6 +40,11 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
 
     private WorkLogEntry find(EntryID entryID) {
         return mongo.findOne(withID(entryID), WorkLogEntry.class);
+    }
+
+    @Override
+    public void delete(EntryID entryID) throws WorkLogEntryDoesNotExists {
+        mongo.remove(load(entryID));
     }
 
     private Query withID(EntryID entryID) {

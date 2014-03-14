@@ -1,28 +1,22 @@
 package com.github.mpi.time_registration.infrastructure.persistence.transients;
 
-import static com.google.common.base.Predicates.alwaysTrue;
-import static com.google.common.base.Predicates.compose;
-import static com.google.common.base.Predicates.equalTo;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import com.github.mpi.time_registration.domain.EmployeeID;
-import com.github.mpi.time_registration.domain.ProjectName;
-import com.github.mpi.time_registration.domain.WorkLog;
-import com.github.mpi.time_registration.domain.WorkLogEntry;
+import com.github.mpi.time_registration.domain.*;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.domain.time.Day;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import static com.google.common.base.Predicates.*;
+
 public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
-    private List<WorkLogEntry> store = new ArrayList<WorkLogEntry>();
+    private List<WorkLogEntry> store = new ArrayList<>();
 
     @Override
     public WorkLog loadAll() {
@@ -57,6 +51,11 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
         }
 
         return null;
+    }
+
+    @Override
+    public void delete(EntryID entryID) throws WorkLogEntryDoesNotExists {
+        store.remove(load(entryID));
     }
 
     private final class TransientWorkLog implements WorkLog {

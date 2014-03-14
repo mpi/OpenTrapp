@@ -10,6 +10,9 @@ public interface WorkLogEntryRepository {
     public WorkLogEntry load(EntryID entryID) 
             throws WorkLogEntryDoesNotExists;
 
+    public void delete(EntryID entryID)
+            throws WorkLogEntryDoesNotExists;
+
     public WorkLog loadAll();
 
     public class WorkLogEntryDoesNotExists extends IllegalStateException{
