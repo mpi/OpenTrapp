@@ -7,7 +7,7 @@ repositories {
 }
 
 ext {
-    springVersion = '3.2.0.RELEASE'
+    springVersion = '3.2.8.RELEASE'
     springDataVersion = '1.0.4.RELEASE'
     jacksonVersion = '1.9.12'
     jettyVersion = '7.6.0.v20120127'
@@ -44,8 +44,6 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
 
-//    compile 'cglib:cglib-nodep:2.2'
-        
     compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.5'
     compile 'com.google.guava:guava:r09'
