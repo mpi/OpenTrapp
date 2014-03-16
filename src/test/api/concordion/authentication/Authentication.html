@@ -9,7 +9,6 @@
             <h3>
                 <u>Example 1</u>: Authentication status (not logged in)
             </h3>
-
             <ul concordion:execute="clear()">
                 <li>Given user is <span concordion:execute="unauthenticated()">unauthenticated</span></li>
                 <li>When <b concordion:set="#method">GET</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/authentication/status</code></li>

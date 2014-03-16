@@ -1,11 +1,7 @@
 package com.github.mpi.time_registration.application;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.github.mpi.time_registration.domain.EmployeeID;
+import com.github.mpi.time_registration.domain.RegistrationService;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.github.mpi.time_registration.domain.EmployeeID;
-import com.github.mpi.time_registration.domain.RegistrationService;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 public class RegistrationEndpoint {
@@ -33,9 +29,7 @@ public class RegistrationEndpoint {
             consumes = "application/json",
                value = "/endpoints/v1/employee/{employeeID}/work-log/entries")
     @ResponseStatus(CREATED)
-    public @ResponseBody ResponseJson submitEntry(HttpServletResponse response, @PathVariable String employeeID, @RequestBody Form form){
-
-        String link = "/endpoints/v1/work-log/entries/WL.0001";
+    public void submitEntry(@PathVariable String employeeID, @RequestBody Form form) {
 
         try{
             
@@ -43,8 +37,6 @@ public class RegistrationEndpoint {
             
             service.submit(form.workload, form.projectName, form.day);
                 
-            response.setHeader("Location", link);
-            
         } catch (IllegalArgumentException e) {
 
             throw new InvalidExpressionException(e);
@@ -53,23 +45,9 @@ public class RegistrationEndpoint {
             
             context.leave();
         }
-        
-        return new ResponseJson("SUCCESS", link);
     }
-    
 
-    @JsonAutoDetect(fieldVisibility=Visibility.ANY)
-    class ResponseJson{
 
-        String status, link;
-
-        ResponseJson(String status, String link) {
-            this.status = status;
-            this.link = link;
-        }
-        
-    }
-    
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     static class Form{
 

@@ -28,10 +28,23 @@ public class UpdatingFixture extends ApiFixture {
     public void workLogEntry(String id, String workload, String projectName) {
         repository.store(new WorkLogEntry(new EntryID(id), Workload.of(workload), new ProjectName(projectName), null, null));
     }
+    
+    public void workLogEntry(String id) {
+        repository.store(new WorkLogEntry(new EntryID(id), Workload.of("5h"), new ProjectName("some"), null, null));
+    }
+    
+    public boolean entryExists(String id) {
+        try {
+            repository.load(new EntryID(id));
+            return true;
+        } catch (WorkLogEntryRepository.WorkLogEntryDoesNotExists e) {
+            return false;
+        }
+    }
 
     public List<Entry> allWorkLogEntries() throws IllegalAccessException {
 
-        List<Entry> entries = new ArrayList<Entry>();
+        List<Entry> entries = new ArrayList<>();
 
         for (WorkLogEntry entry : repository.loadAll()) {
             String id = entry.id().toString();

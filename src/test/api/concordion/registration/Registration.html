@@ -1,4 +1,4 @@
-<html 
+<html
     xmlns:concordion="http://www.concordion.org/2007/concordion"
     xmlns:json="https://github.com/mpi/OpenTrApp">
 
@@ -7,16 +7,16 @@
     <h1>Registration</h1>
 
     <div class="examples">
-        
+
         <div>
             <h3>
-                <b>Background</b>: 
+                <b>Background</b>:
             </h3>
             <ul>
                 <li>Given user <b>Homer</b> already exists</li>
             </ul>
         </div>
-    
+
         <div class="example">
 
             <h3>
@@ -26,7 +26,7 @@
             <ul concordion:execute="clear()">
                 <li>Given client has been authenticated as <b concordion:set="#method">Homer</b></li>
                 <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
-                <li>And request body contains following data: 
+                <li>And request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",
     "projectName": "ApiDesign",
@@ -58,13 +58,13 @@
         <div class="example">
 
             <h3>
-                <u>Example 1</u>: Creating new Work Log Entry (for given day)
+                <u>Example 2</u>: Creating new Work Log Entry (for given day)
             </h3>
 
             <ul concordion:execute="clear()">
                 <li>Given client has been authenticated as <b concordion:set="#method">Homer</b></li>
                 <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
-                <li>And request body contains following data: 
+                <li>And request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",
     "projectName": "ApiDesign",
@@ -89,17 +89,17 @@
                 </li>
             </ul>
         </div>
-        
+
         <div class="example">
 
             <h3>
-                <u>Example 2</u>: Response of successful request
+                <u>Example 3</u>: Response of successful request
             </h3>
 
             <ul concordion:execute="clear()">
                 <li>Given client has been authenticated as <b concordion:set="#method">Homer</b></li>
                 <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
-                <li>And request body contains following data: 
+                <li>And request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",
     "projectName": "ApiDesign",
@@ -107,25 +107,6 @@
 }</pre>
                 </li>
                 <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 201 Created</b></li>
-                <li>And response should look like:
-<pre json:assertIncludesJson="response()">{
-    "status": "SUCCESS",
-    "link": "/endpoints/v1/work-log/entries/WL.0001"
-}</pre>
-                </li>
-            </ul>
-        </div>
-        <div class="example">
-
-            <h3>
-                <u>Example 3</u>: Include location of created resource in response headers
-            </h3>
-            
-            <ul concordion:execute="clear()">
-                <li>When <span concordion:execute="successfulRequest()">request</span> is handled <b concordion:assertTrue="isSuccessful()">succesfully</b></li>
-                <li>Then response body should contain following <b concordion:set="#header">Location</b> header: 
-                    <pre concordion:assertEquals="headerContent(#header)">Location: /endpoints/v1/work-log/entries/WL.0001</pre>
-                </li>
             </ul>
         </div>
 
@@ -137,7 +118,7 @@
 
             <ul concordion:execute="clear()">
                 <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
-                <li>And request body contains following data: 
+                <li>And request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m"
 }
@@ -157,7 +138,7 @@
                 <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
                 <li>And content type is set to <b concordion:execute="contentType(#TEXT)">text/html</b>
                 </li>
-                <li>And request body contains following data: 
+                <li>And request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",
     "projectName": "ApiDesign",
@@ -177,7 +158,7 @@
 
             <ul concordion:execute="clear()">
                 <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Unknown/work-log/entries</code></li>
-                <li>And request body contains following data: 
+                <li>And request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",
     "projectName": "ApiDesign",

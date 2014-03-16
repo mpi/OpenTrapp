@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@Profile("acceptance-tests")
+@Profile("no-security")
 @Configuration
 public class GlobaSecurityProfile {
 

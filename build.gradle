@@ -7,7 +7,9 @@ repositories {
 }
 
 ext {
-    springVersion = '3.1.0.RELEASE'
+    springVersion = '3.2.8.RELEASE'
+    springSecurityVersion = '3.1.0.RELEASE'
+    springDataVersion = '1.0.4.RELEASE'
     jacksonVersion = '1.9.12'
     jettyVersion = '7.6.0.v20120127'
 }
@@ -36,20 +38,22 @@ dependencies {
         compile "org.springframework:spring-$module:$springVersion"
     }
     ['core', 'web', 'config', 'openid'].each { module ->
-        compile "org.springframework.security:spring-security-$module:$springVersion"
+        compile "org.springframework.security:spring-security-$module:$springSecurityVersion"
     }
 
     compile ("org.springframework:spring-context:$springVersion"){
         exclude group: 'commons-logging', module: 'commons-logging'
     }
 
-    compile 'cglib:cglib-nodep:2.2'
-        
     compile "org.codehaus.jackson:jackson-mapper-asl:$jacksonVersion"
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.5'
     compile 'com.google.guava:guava:r09'
     compile 'org.apache.commons:commons-lang3:3.0'
         
+    
+    compile 'org.mongodb:mongo-java-driver:2.9.1'
+    compile "org.springframework.data:spring-data-mongodb:$springDataVersion"
+    compile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.28'
     
     testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:1.5.0'
@@ -86,3 +90,7 @@ task apiTest(type:Test) {
 }
 
 test.dependsOn apiTest
+test {
+    scanForTestClasses = true
+    exclude '**/*Setup'
+}
