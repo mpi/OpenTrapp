@@ -17,8 +17,7 @@
 		<param-value>
         	classpath:/com/github/mpi/time_registration/application/web-context.xml,
         	classpath:/com/github/mpi/time_registration/application/application-context.xml,
-        	classpath:/com/github/mpi/users_and_access/application/application-context.xml,
-        	classpath:/com/github/mpi/users_and_access/infrastructure/security-context.xml
+        	classpath:/com/github/mpi/users_and_access/application/application-context.xml
         </param-value>
 	</context-param>
 

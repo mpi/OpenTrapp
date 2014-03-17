@@ -1,4 +1,4 @@
-package com.github.mpi.users_and_access.infrastructure.global;
+package com.github.mpi.users_and_access.infrastructure.mock;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.openid.OpenIDAttribute;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 
+import com.github.mpi.users_and_access.domain.User;
+
 public class OpenIDUserService implements AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 
     private List<String> allowedUserEmails;
@@ -23,17 +25,14 @@ public class OpenIDUserService implements AuthenticationUserDetailsService<OpenI
     @Override
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
 
-        String url = token.getIdentityUrl();
-        System.err.println("URL: " + url);
         List<OpenIDAttribute> attributes = token.getAttributes();
-
         String email = readAttribute(attributes, "Email");
         String fullName = String.format("%s %s", readAttribute(attributes, "FirstName"), readAttribute(attributes, "LastName"));
-        if (!allowedUserEmails.contains(email)) {
-            throw new UsernameNotFoundException(email);
-        }
+//        if (!allowedUserEmails.contains(email)) {
+//            throw new UsernameNotFoundException(email);
+//        }
 
-        return new OpenIDUser(email, fullName);
+        return new OpenIDUserAdapter(email, fullName);
     }
 
     private String readAttribute(List<OpenIDAttribute> attributes, String name) {
@@ -45,16 +44,12 @@ public class OpenIDUserService implements AuthenticationUserDetailsService<OpenI
         return null;
     }
 
-    public static final class OpenIDUser implements UserDetails {
+    public static final class OpenIDUserAdapter extends User implements UserDetails {
         
         private static final long serialVersionUID = -6345826126136996788L;
 
-        private final String email;
-        private final String fullName;
-
-        public OpenIDUser(String email, String fullName) {
-            this.email = email;
-            this.fullName = fullName;
+        public OpenIDUserAdapter(String email, String fullName) {
+            super(email, fullName);
         }
 
         @Override
@@ -79,11 +74,11 @@ public class OpenIDUserService implements AuthenticationUserDetailsService<OpenI
 
         @Override
         public String getUsername() {
-            return email;
+            return super.username();
         }
 
         public String getFullName() {
-            return fullName;
+            return super.displayName();
         }
         
         @Override

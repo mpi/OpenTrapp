@@ -1,32 +1,86 @@
 package concordion.authentication;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import support.ApiFixture;
 
-import com.github.mpi.users_and_access.domain.User;
-import com.github.mpi.users_and_access.infrastructure.global.GlobalSecurityContext;
+import com.github.mpi.users_and_access.infrastructure.mock.MockOpenIDServer;
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.filter.session.SessionFilter;
 
 public class AuthenticationFixture extends ApiFixture {
 
     @Autowired
-    private GlobalSecurityContext securityContext;
+    private MockOpenIDServer openID;
     
-    public void get(String location){
-        response = request.redirects().follow(false).when().get(location);
+    private SessionFilter filter = new SessionFilter();
+
+    private String eventuallyRedirectedPage = "no-redirection";
+    
+    @Override
+    public void get(String location) {
+        response = request.filter(filter).when().get(location);
         response.prettyPrint();
     }
     
-    public void loggedInAs(final String displayName, final String username){
-        securityContext.set(new User(username, displayName));
+    public void loggedInAs(final String displayName, final String username) throws UnsupportedEncodingException{
+        String firstName = displayName.split(" ")[0];
+        String lastName = displayName.split(" ")[1];
+        openID.setAuthenticatedAs(username, firstName, lastName);
+        
+        login();
+    }
+
+    public String redirectedPage(){
+        return eventuallyRedirectedPage.replaceAll("http://localhost:8080", "");
+    }
+    
+    public void login(String url) {
+        
+        int i = 1;
+        
+        while(url != null){
+            
+            response = 
+                 RestAssured
+                    .given()
+                        .filter(filter)
+                        .redirects()
+                        .follow(false)
+                    .when()
+                        .get(url);
+            
+            url = response.getHeader("Location");
+            
+            if(url != null){
+                url = URLDecoder.decode(url);
+                eventuallyRedirectedPage = url;
+            }
+            
+            System.err.println("redirect to(" + i++ + "): " + url);
+            System.err.println("session set to: " + filter.getSessionId());
+        }
+    }    
+    
+    private void login() {
+        login("/endpoints/v1/authentication/login");
+    }
+
+    public void loginSuccessfully(String url) {
+        openID.setAuthenticatedAs("homer.simpson", "Homer", "Simpson");
+        login(url);
     }
     
     public void unauthenticated(){
-        securityContext.clear();
+
+        openID.setUnauthenticated();
+        login();
     }
 
-    public void authenticated(){
-        loggedInAs("Homer Simpson", "homer.simpson@springfield.com");
+    public void authenticated() throws UnsupportedEncodingException{
+        loggedInAs("Homer Simpson", "homer.simpson");
     }
-    
 }

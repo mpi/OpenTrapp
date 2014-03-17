@@ -19,9 +19,11 @@
        	<custom-filter ref="fixedOpenIDProviderFilter" before="OPENID_FILTER"/>
 
         <openid-login
-        	login-page="/endpoints/v1/authentication/login"
+        	login-page="/endpoints/v1/authentication/status"
         	login-processing-url="/endpoints/v1/authentication/login"
             default-target-url="/endpoints/v1/authentication/status"
+            authentication-failure-handler-ref="redirectToStatus"
+			authentication-success-handler-ref="redirectToStatus"
             always-use-default-target="true">
             
             <attribute-exchange>
@@ -31,6 +33,8 @@
             </attribute-exchange>
         </openid-login>
     </http>
+
+	<beans:bean id="redirectToStatus" class="com.github.mpi.users_and_access.infrastructure.spring.RedirectToStatus"/>
 
 	<beans:bean id="fixedOpenIDProviderFilter" class="com.github.mpi.users_and_access.infrastructure.spring.FixedOpenIDProviderFilter">
 		<beans:property name="providerUrl" value="http://localhost:8080/MockOpenID/discover"/>
