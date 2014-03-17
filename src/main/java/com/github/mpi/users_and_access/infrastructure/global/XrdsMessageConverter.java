@@ -31,5 +31,4 @@ public class XrdsMessageConverter extends AbstractHttpMessageConverter<String>{
     protected void writeInternal(String t, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
         outputMessage.getBody().write(t.getBytes("UTF-8"));
     }
-
 }

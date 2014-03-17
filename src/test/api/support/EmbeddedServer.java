@@ -31,6 +31,7 @@ public class EmbeddedServer {
     private void enableProfiles() {
         
         System.setProperty("spring.profiles.active","no-security,transients");
+//        System.setProperty("spring.profiles.active","spring-security,transients");
 
         System.err.println("-------------------------------");
         System.err.println(String.format("    Using profiles: %s ", System.getProperty("spring.profiles.active")));
