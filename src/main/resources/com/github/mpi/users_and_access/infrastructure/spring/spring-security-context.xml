@@ -9,5 +9,7 @@
 	<bean id="fixedOpenIDProviderFilter" class="com.github.mpi.users_and_access.infrastructure.spring.FixedOpenIDProviderFilter">
 		<property name="providerUrl" value="https://www.google.com/accounts/o8/id?openid.ui.icon=true"/>
 	</bean>
+	
+	<alias name="springSecurityFilterChain" alias="securityFilterChain"/>
  
 </beans>
