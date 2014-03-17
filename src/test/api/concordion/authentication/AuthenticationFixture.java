@@ -21,6 +21,12 @@ public class AuthenticationFixture extends ApiFixture {
     private String eventuallyRedirectedPage = "no-redirection";
     
     @Override
+    public void clear() {
+        super.clear();
+        securityContext.enableMockMode();
+    }
+    
+    @Override
     public void get(String location) {
         response = request.filter(filter).when().get(location);
         response.prettyPrint();

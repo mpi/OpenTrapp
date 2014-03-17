@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.mpi.time_registration.infrastructure.persistence.PersistenceBoundedContext;
+import com.github.mpi.users_and_access.infrastructure.mock.MockSecurityContext;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
@@ -18,11 +19,15 @@ public class ApiFixture {
     @Autowired
     private PersistenceBoundedContext persistenceContext;
 
+    @Autowired
+    protected MockSecurityContext securityContext;
+    
     protected RequestSpecification request;
     protected Response response;
 
     public void clear() {
 
+        securityContext.disableAtAll();
         persistenceContext.clear();
 
         request = given()
