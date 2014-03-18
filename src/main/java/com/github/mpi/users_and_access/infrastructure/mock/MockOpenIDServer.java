@@ -58,7 +58,7 @@ public class MockOpenIDServer {
 
             if(response instanceof AuthSuccess){
 
-                Map<String, String> map = new HashMap<>();
+                Map<String, String> map = new HashMap<String, String>();
                 map.put("ns.ext1", "http://openid.net/srv/ax/1.0");
                 map.put("mode", "fetch_response");
                 map.put("type.Email", "http://schema.openid.net/contact/email");
