@@ -2,6 +2,7 @@ package com.github.mpi.users_and_access.infrastructure.spring;
 
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,12 +12,23 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.openid.OpenIDAuthenticationFilter;
 
-public class FixedOpenIDProviderFilter implements Filter{
+import com.google.common.collect.Sets;
 
+public class FixedOpenIDProviderFilter implements Filter{
+    
     private String providerUrl;
 
+    @Autowired
+    private OpenIDAuthenticationFilter configuredFilter;
+    
+    @PostConstruct
+    private void configure(){
+        configuredFilter.setReturnToUrlParameters(Sets.newHashSet("redirect_to"));
+    }
+    
     public void setProviderUrl(String providerUrl) {
         this.providerUrl = providerUrl;
     }

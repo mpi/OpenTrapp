@@ -17,14 +17,24 @@ public class RedirectToStatus implements AuthenticationSuccessHandler, Authentic
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
             throws IOException, ServletException {
         
-        response.sendRedirect("/endpoints/v1/authentication/status");
+        response.sendRedirect(computeRedirectionUrl(request));
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
 
-        response.sendRedirect("/endpoints/v1/authentication/status");
+        response.sendRedirect(computeRedirectionUrl(request));
+    }
+
+    private String computeRedirectionUrl(HttpServletRequest request) {
+
+        String redirectTo = "/endpoints/v1/authentication/status";
+
+        if(request.getParameter("redirect_to") != null){
+            redirectTo = request.getParameter("redirect_to");
+        }
+        return redirectTo;
     }
 
 }

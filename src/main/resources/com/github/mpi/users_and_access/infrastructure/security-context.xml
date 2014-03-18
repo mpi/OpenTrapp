@@ -33,7 +33,6 @@
         </openid-login>
     </http>
 
-
     <authentication-manager>
    		<authentication-provider ref="authenticationProvider"/>
     </authentication-manager>
