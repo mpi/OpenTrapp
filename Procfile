@@ -1,0 +1,1 @@
+java $JAVA_OPTS -Dspring.profiles.active="mongo,mongo-lab,spring-security" -jar jetty-runner.jar --port $PORT build/libs/*.war

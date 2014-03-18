@@ -26,7 +26,7 @@ public class OpenIDUserService implements AuthenticationUserDetailsService<OpenI
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
 
         List<OpenIDAttribute> attributes = token.getAttributes();
-        String email = readAttribute(attributes, "Email");
+        String email = readAttribute(attributes, "Email").split("@")[0];
         String fullName = String.format("%s %s", readAttribute(attributes, "FirstName"), readAttribute(attributes, "LastName"));
 //        if (!allowedUserEmails.contains(email)) {
 //            throw new UsernameNotFoundException(email);
