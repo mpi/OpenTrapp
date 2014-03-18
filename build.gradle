@@ -1,6 +1,10 @@
 apply plugin: 'war'
 apply plugin: 'jetty'
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.9'
+}
+
 repositories { 
 
     mavenCentral()
@@ -88,6 +92,8 @@ task apiTest(type:Test) {
 
     exclude '**/*Fixture.class'
 }
+
+task stage(dependsOn: ['clean', 'war'])
 
 test.dependsOn apiTest
 test {
