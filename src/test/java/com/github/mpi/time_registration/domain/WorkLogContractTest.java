@@ -120,6 +120,21 @@ public abstract class WorkLogContractTest {
         assertThat(log).containsOnly(valentines, afterValentines);
     }
     
+    @Test
+    public void shouldReturnWorkLogBetweenDates() throws Exception {
+        
+        WorkLogEntry beforeValentines = anEntryOnDay("Before Valentine's Day", Day.of("2014/02/01"));
+        WorkLogEntry valentines = anEntryOnDay("On Valentine's Day", Day.of("2014/02/14"));
+        WorkLogEntry afterValentines = anEntryOnDay("After Valentine's Day", Day.of("2014/02/24"));
+        
+        // given:
+        repositoryContainsFollowingEntries(beforeValentines, valentines, afterValentines);
+        // when:
+        WorkLog log = repository.loadAll().after(Day.of("2014/02/14")).before(Day.of("2014/02/14"));
+        // then:
+        assertThat(log).containsOnly(valentines);
+    }
+    
     // --
     
     private WorkLogEntry anEntryOnDay(String id, Day day) {

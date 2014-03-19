@@ -30,9 +30,9 @@ public class EmbeddedServer {
     
     private void enableProfiles() {
         
-//        System.setProperty("spring.profiles.active","mock-security,transients");
-//        System.setProperty("spring.profiles.active","transients,spring-security,demo");
-        System.setProperty("spring.profiles.active","spring-security,transients");
+        System.setProperty("spring.profiles.active","mock-security,transients");            // aceptance-tests
+//        System.setProperty("spring.profiles.active","mongo,mongo-lab,spring-security");   // test
+//        System.setProperty("spring.profiles.active","spring-security,transients");        // dev
 
         System.err.println("-------------------------------");
         System.err.println(String.format("    Using profiles: %s ", System.getProperty("spring.profiles.active")));

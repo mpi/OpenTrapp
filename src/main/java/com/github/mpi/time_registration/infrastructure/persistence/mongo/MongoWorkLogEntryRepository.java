@@ -75,10 +75,16 @@ public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
                 criteria.and("employeeID").is(employeeID);
             if(projectName != null)
                 criteria.and("projectName").is(projectName);
+            
+            Criteria dateCriteria = Criteria.where("day.date");
             if(start != null)
-                criteria.and("day").gte(start);
+                dateCriteria.gte(start.toString());
             if(end != null)
-                criteria.and("day").lte(end);
+                dateCriteria.lte(end.toString());
+            if(start != null || end != null){
+                criteria.andOperator(dateCriteria);
+            }
+            
             return Query.query(criteria);
         }
         
