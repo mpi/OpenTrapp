@@ -13,7 +13,10 @@
         <intercept-url pattern="/MockOpenID/**" access="permitAll" />
         <intercept-url pattern="/**" access="isFullyAuthenticated()" />
 
-        <logout logout-success-url="/endpoints/v1/authentication/logout" />
+        <logout 
+        	logout-url="/endpoints/v1/authentication/logout"
+        	success-handler-ref="redirectToStatus" 
+        	/>
        
        	<custom-filter ref="fixedOpenIDProviderFilter" before="OPENID_FILTER"/>
 
