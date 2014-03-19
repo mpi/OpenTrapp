@@ -3,6 +3,8 @@ package com.github.mpi.users_and_access.application;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class AuthenticationEndpoint {
     @Autowired
     private SecurityContext securityContext;
     
+    @Autowired
+    private HttpServletRequest request;
+    
     @RequestMapping(
             method   = GET,           
             value    = "/endpoints/v1/authentication/status")
@@ -33,13 +38,19 @@ public class AuthenticationEndpoint {
         return new AuthenticationStatus(authenticatedUser.username(), authenticatedUser.displayName(), isAuthenticated);
     }
     
+    private String host(){
+        
+        String fullPath = request.getRequestURL().toString();
+        return fullPath.replace(request.getRequestURI(), "");
+    }
+    
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     class AuthenticationStatus {
 
         String username, displayName;
         boolean authenticated;
-        String loginUrl = "/endpoints/v1/authentication/login"; 
-        String logoutUrl = "/endpoints/v1/authentication/logout"; 
+        String loginUrl =  host() + "/endpoints/v1/authentication/login"; 
+        String logoutUrl = host() + "/endpoints/v1/authentication/logout"; 
 
         public AuthenticationStatus(String username, String displayName, boolean authenticated) {
             this.username = username;

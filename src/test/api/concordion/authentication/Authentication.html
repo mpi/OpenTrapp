@@ -17,7 +17,7 @@
 <pre json:assertIncludesJson="response()">{
     "displayName": "Anonymous",    
     "authenticated": false,    
-    "loginUrl": "/endpoints/v1/authentication/login"
+    "loginUrl": "http://{host}/endpoints/v1/authentication/login"
 }</pre></li>
             </ul>
         </div>
@@ -34,10 +34,10 @@
                 <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 200 OK</b></li>
                 <li>And response should look like:
 <pre json:assertIncludesJson="response()">{
-    "username": "homer.simpson@springfield.com",
+    "username": "homer.simpson",
     "displayName": "Homer Simpson",    
     "authenticated": true,    
-    "logoutUrl": "/endpoints/v1/authentication/logout"
+    "logoutUrl": "http://{host}/endpoints/v1/authentication/logout"
 }</pre></li>
             </ul>
         </div> 

@@ -92,7 +92,7 @@ public class ApiFixture {
     }
 
     public String response() {
-        return response.asString();
+        return response.asString().replaceAll("localhost:8080", "{host}");
     }
 
     public String headerContent(String header) {
