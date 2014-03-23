@@ -25,7 +25,7 @@ public class RedirectToStatus implements AuthenticationSuccessHandler, Authentic
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
 
-        response.sendRedirect(computeRedirectionUrl(request) + "authToken=" + request.getSession().getId());
+        response.sendRedirect(computeRedirectionUrl(request) + "?authToken=" + request.getSession().getId());
     }
 
     @Override
