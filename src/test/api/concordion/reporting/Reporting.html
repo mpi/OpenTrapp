@@ -14,13 +14,14 @@
 
             <ul concordion:execute="clear()">
                 <li>Given there are following entries
-                    <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee)">
+                    <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee, #day)">
                         <thead>
                             <tr>
                                 <th concordion:set="#id">Id</th>
                                 <th concordion:set="#workload">Workload</th>
                                 <th concordion:set="#projectName">Project Name</th>
                                 <th concordion:set="#employee">Employee</th>
+                                <th concordion:set="#day">Day</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,13 +90,14 @@
 
             <ul concordion:execute="clear()">
                 <li>Given there are following entries
-                    <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee)">
+                    <table concordion:execute="workLogEntry(#id, #workload, #projectName, #employee, #day)">
                         <thead>
                             <tr>
                                 <th concordion:set="#id">Id</th>
                                 <th concordion:set="#workload">Workload</th>
                                 <th concordion:set="#projectName">Project Name</th>
                                 <th concordion:set="#employee">Employee</th>
+                                <th concordion:set="#day">Day</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -140,7 +142,7 @@
             "id": "WL.0003",
             "workload": "3h",
             "projectName": "TheProject",
-            "employee": "Jane"
+            "employee": "Jane",
             "day": "2014/02/24"
         },
         {

@@ -48,9 +48,9 @@
 
             <ul concordion:execute="clear()">
                 <li>Given user is <span concordion:execute="unauthenticated()">unauthenticated</span></li>
-                <li>When user login with url <code concordion:set="#loginUrl">/endpoints/v1/authentication/login?redirect_to=/expected_redirect_site.com/page</code></li>
+                <li>When user login with url <code concordion:set="#loginUrl">/endpoints/v1/authentication/login?redirect_to=/expected_redirect_site.com/page/</code></li>
                 <li>Then if user authenticate <b concordion:execute="loginSuccessfully(#loginUrl)">sucessfully</b></li>
-                <li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/expected_redirect_site.com/page</pre></li>
+                <li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/expected_redirect_site.com/page/#/authToken/{sessionId}</pre></li>
             </ul>
         </div>        
         <div class="example">
@@ -62,7 +62,7 @@
                 <li>Given user is <span concordion:execute="unauthenticated()">unauthenticated</span></li>
                 <li>When user login with url <code concordion:set="#loginUrl">/endpoints/v1/authentication/login</code></li>
                 <li>Then if user authenticate <b concordion:execute="loginSuccessfully(#loginUrl)">sucessfully</b></li>
-                <li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/endpoints/v1/authentication/status</pre></li>
+                <li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/endpoints/v1/authentication/status/#/authToken/{sessionId}</pre></li>
             </ul>
         </div> 
     </div>

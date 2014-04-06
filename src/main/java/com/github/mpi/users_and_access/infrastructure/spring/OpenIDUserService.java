@@ -16,10 +16,10 @@ import com.github.mpi.users_and_access.domain.User;
 
 public class OpenIDUserService implements AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 
-    private List<String> allowedUserEmails;
+//    private List<String> allowedUserEmails;
 
     public void setAllowedUserEmails(List<String> allowedUserEmails) {
-        this.allowedUserEmails = allowedUserEmails;
+//        this.allowedUserEmails = allowedUserEmails;
     }
 
     @Override

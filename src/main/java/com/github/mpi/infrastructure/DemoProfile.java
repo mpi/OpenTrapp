@@ -16,7 +16,7 @@ public class DemoProfile {
     private WorkLogEntryRepository repository;
 
     @PostConstruct
-    private void init(){
+    void init(){
 
         repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.01"), Workload.of("8h"), new ProjectName("ProjectManhattan"), new EmployeeID("homer.simpson"), Day.of("2014/03/03")));
         repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.02"), Workload.of("6h"), new ProjectName("ProjectManhattan"), new EmployeeID("bart.simpson"), Day.of("2014/02/01")));

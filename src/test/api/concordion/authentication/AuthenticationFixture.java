@@ -41,7 +41,7 @@ public class AuthenticationFixture extends ApiFixture {
     }
 
     public String redirectedPage(){
-        return eventuallyRedirectedPage.replaceAll("http://localhost:8080", "");
+        return eventuallyRedirectedPage.replaceAll("http://localhost:8080", "").replaceAll(sessionId(), "{sessionId}");
     }
     
     public void login(String url) {
@@ -88,5 +88,9 @@ public class AuthenticationFixture extends ApiFixture {
 
     public void authenticated() throws UnsupportedEncodingException{
         loggedInAs("Homer Simpson", "homer.simpson");
+    }
+    
+    public String sessionId(){
+        return filter.getSessionId();
     }
 }

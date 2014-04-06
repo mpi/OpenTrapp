@@ -25,7 +25,7 @@ public class FixedOpenIDProviderFilter implements Filter{
     private OpenIDAuthenticationFilter configuredFilter;
     
     @PostConstruct
-    private void configure(){
+    void configure(){
         configuredFilter.setReturnToUrlParameters(Sets.newHashSet("redirect_to"));
     }
     

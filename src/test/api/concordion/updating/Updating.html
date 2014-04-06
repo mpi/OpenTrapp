@@ -89,9 +89,7 @@
                 <u>Example 3</u>: Deleting Work Log Entry
             </h3>
             <ul concordion:execute="clear()">
-                <li><span concordion:execute="workLogEntry(#id)">Given entry with
-                id <b concordion:set="#id">WL.0006</b>
-                already exists</span></li>
+                <li><span concordion:execute="workLogEntry(#id)">Given entry with id <b concordion:set="#id">WL.0006</b> already exists</span></li>
                 <li>When <b concordion:set="#method">DELETE</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/work-log/entries/WL.0006</code></li>
                 <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 204 No Content</b></li>
                 <li>And there should be no more <span concordion:assertFalse="entryExists(#id)"><b concordion:set="#id">WL.0006</b></span> work log entry.</li>
