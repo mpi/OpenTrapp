@@ -26,7 +26,7 @@ public class ProjectNamesEndpoint {
     @ResponseBody
     public List<String> list() {
 
-        List<String> results = new ArrayList<>();
+        List<String> results = new ArrayList<String>();
         for (ProjectName name : projectNames) {
             results.add(name.toString());
         }

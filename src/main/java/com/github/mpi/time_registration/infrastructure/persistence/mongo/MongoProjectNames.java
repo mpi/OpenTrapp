@@ -34,7 +34,7 @@ public class MongoProjectNames implements ProjectNames {
     
         List<WorkLogEntry> all = mongo.find(Query.query(criteria), WorkLogEntry.class);
 
-        Set<ProjectName> names = new HashSet<>();
+        Set<ProjectName> names = new HashSet<ProjectName>();
         for (WorkLogEntry workLogEntry: all){
             names.add(workLogEntry.projectName());
         }

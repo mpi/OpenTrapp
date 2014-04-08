@@ -22,7 +22,7 @@ public class TransientProjectNames implements ProjectNames {
     @Override
     public Iterator<ProjectName> iterator() {
 
-        Set<ProjectName> projectNames = new HashSet<>();
+        Set<ProjectName> projectNames = new HashSet<ProjectName>();
         for (WorkLogEntry w : repository.loadAll()) {
             if(w.day().after(after)){
                 projectNames.add(w.projectName());
