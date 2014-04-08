@@ -12,9 +12,9 @@ import com.github.mpi.infrastructure.mongo.MongoContext;
 import com.github.mpi.infrastructure.mongo.MongoDevelopmentDatabase;
 import com.github.mpi.infrastructure.mongo.MongoDevelopmentProfile;
 import com.github.mpi.infrastructure.mongo.MongoLabProfile;
+import com.github.mpi.time_registration.domain.ProjectNamesContractTest;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepositoryContractTest;
-import com.github.mpi.time_registration.infrastructure.persistence.mongo.MongoWorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes={
@@ -24,14 +24,25 @@ import com.github.mpi.time_registration.infrastructure.persistence.mongo.MongoWo
         MongoDevelopmentDatabase.class
 })
 @ActiveProfiles({"mongo", "mongo-dev"})
-public class MongoWorkLogEntryRepositoryTest extends WorkLogEntryRepositoryContractTest{
+public class MongoProjectNamesTest extends ProjectNamesContractTest{
 
+    private WorkLogEntryRepository repository;
+    
     @Autowired
     private MongoTemplate mongo;
     
     @Before
     public void setUp() {
         repository = new MongoWorkLogEntryRepository(mongo);
+        projectNames = new MongoProjectNames(mongo);
         mongo.dropCollection(WorkLogEntry.class);
     }
+
+    @Override
+    protected void followingWorkLogEntriesExist(WorkLogEntry... entries) {
+        for (WorkLogEntry entry : entries) {
+            repository.store(entry);
+        }
+    }
+    
 }

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
+import com.github.mpi.time_registration.domain.ProjectNames;
 import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.infrastructure.persistence.PersistenceBoundedContext;
@@ -25,6 +26,12 @@ public class MongoPersistenceBoundedContext implements PersistenceBoundedContext
         return new MongoWorkLogEntryRepository(mongo);
     }
 
+    @Bean
+    @Scope(value="prototype", proxyMode=ScopedProxyMode.INTERFACES)
+    public ProjectNames projectNames(){
+        return new MongoProjectNames(mongo);
+    }
+    
     @Override
     public void clear() {
         mongo.dropCollection(WorkLogEntry.class);

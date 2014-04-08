@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import com.github.mpi.time_registration.domain.ProjectNames;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.infrastructure.persistence.PersistenceBoundedContext;
 
@@ -20,6 +21,12 @@ public class TransientPersistenceBoundedContext implements PersistenceBoundedCon
     @Scope(value="prototype", proxyMode=ScopedProxyMode.INTERFACES)
     public WorkLogEntryRepository repository(){
         return repository;
+    }
+    
+    @Bean
+    @Scope(value="prototype", proxyMode=ScopedProxyMode.INTERFACES)
+    public ProjectNames projectNames(){
+        return new TransientProjectNames(repository);
     }
     
     @Override
