@@ -8,10 +8,13 @@
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
     >
 
+    <global-method-security pre-post-annotations="enabled"/>
+
     <http use-expressions="true">
         <intercept-url pattern="/endpoints/v1/authentication/**" access="permitAll" />
         <intercept-url pattern="/MockOpenID/**" access="permitAll" />
         <intercept-url pattern="/**" access="isFullyAuthenticated()" />
+        <access-denied-handler ref="accessDeniedBean" />
 
         <logout 
         	logout-url="/endpoints/v1/authentication/logout"
@@ -53,4 +56,6 @@
             </beans:list>
         </beans:property>
     </beans:bean>
+    <beans:bean id="accessDeniedBean" class="com.github.mpi.users_and_access.infrastructure.spring.CustomAccessDeniedHandler"/>
+
 </beans:beans>
