@@ -1,7 +1,7 @@
-OpenTrApp
+OpenTrapp
 =========
 
-[![Build Status](https://secure.travis-ci.org/Pragmatists/OpenTrApp.png)](http://travis-ci.org/Pragmatists/OpenTrApp)
+[![Build Status](https://secure.travis-ci.org/Pragmatists/OpenTrapp.png)](http://travis-ci.org/Pragmatists/OpenTrapp)
 
 Open Time Registration Application
 
