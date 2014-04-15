@@ -62,12 +62,20 @@ public class AuthenticationFixture extends ApiFixture {
             url = response.getHeader("Location");
             
             if(url != null){
-                url = URLDecoder.decode(url);
+                url = decode(url);
                 eventuallyRedirectedPage = url;
             }
             
             System.err.println("redirect to(" + i++ + "): " + url);
             System.err.println("session set to: " + filter.getSessionId());
+        }
+    }
+
+    private String decode(String url) {
+        try {
+            return URLDecoder.decode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
         }
     }    
     

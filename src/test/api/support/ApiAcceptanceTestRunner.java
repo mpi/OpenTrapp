@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostP
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class ApiAcceptanceTestRunner extends ConcordionRunner{
+public class ApiAcceptanceTestRunner extends ConcordionRunner {
 
     public ApiAcceptanceTestRunner(Class<?> fixtureClass) throws InitializationError {
         super(fixtureClass);
@@ -21,13 +21,14 @@ public class ApiAcceptanceTestRunner extends ConcordionRunner{
         
         return test;
     }
-
+    
     private void injectDependencies(Object test) {
 
         AutowireCapableBeanFactory injector = adHocInjector();
         injector.autowireBeanProperties(test, AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, true);
     }
 
+    @SuppressWarnings("resource")
     private AutowireCapableBeanFactory adHocInjector() {
         AnnotationConfigApplicationContext adHocAutowiringContext 
             = new AnnotationConfigApplicationContext(AutowiredAnnotationBeanPostProcessor.class);

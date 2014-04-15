@@ -90,13 +90,21 @@ public class AuthorizationFixture extends ApiFixture {
             url = response.getHeader("Location");
             
             if(url != null){
-                url = URLDecoder.decode(url);
+                url = decode(url);
             }
             
             System.err.println("redirect to(" + i++ + "): " + url);
             System.err.println("session set to: " + filter.getSessionId());
         }
     }
+    
+    private String decode(String url) {
+        try {
+            return URLDecoder.decode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        }
+    }    
     
     public void authenticated() throws UnsupportedEncodingException{
         loggedInAs("Homer");
