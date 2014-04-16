@@ -9,7 +9,5 @@ In order to build:
 ```
   gradle clean test
 ```
-REST API test specification:
-```
-  http://pragmatists.github.io/OpenTrapp
-```
+REST API executable specification:
+[http://pragmatists.github.io/OpenTrapp](http://pragmatists.github.io/OpenTrapp)
