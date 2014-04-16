@@ -116,7 +116,7 @@ public class AuthorizationFixture extends ApiFixture {
     }
     
     public void validUpdate(String location){
-        body("{\"projectName\": \"NewProject\"");
+        body("{\"projectName\": \"NewProject\"}");
         post(location);
     }
 }

@@ -1,17 +1,20 @@
 package com.github.mpi.time_registration.application;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.github.mpi.time_registration.domain.ProjectName;
 import com.github.mpi.time_registration.domain.UpdateService;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
 import com.github.mpi.time_registration.domain.WorkLogEntryRepository.WorkLogEntryDoesNotExists;
 import com.github.mpi.time_registration.domain.Workload;
 
@@ -40,6 +44,7 @@ public class UpdateEndpoint {
             consumes = "application/json",
             value    = "/endpoints/v1/work-log/entries/{id:.+}")
     @ResponseStatus(OK)
+    @PreAuthorize("@permissions.canDelete(#id)")
     public @ResponseBody String updateEntry(HttpServletResponse response, @PathVariable String id, @RequestBody Form form){
 
         Workload workload = form.workload == null ? null : Workload.of(form.workload);
@@ -56,10 +61,11 @@ public class UpdateEndpoint {
             method   = DELETE,
             value    = "/endpoints/v1/work-log/entries/{id:.+}")
     @ResponseStatus(NO_CONTENT)
+    @PreAuthorize("@permissions.canDelete(#id)")
     public void deleteEntry(@PathVariable String id) {
         repository.delete(new EntryID(id));
     }
-
+    
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     public static class Form{
         String workload;
@@ -75,6 +81,10 @@ public class UpdateEndpoint {
         }
         if(e instanceof IllegalArgumentException){
             setStatus(response, SC_BAD_REQUEST);
+            return;
+        }
+        if(e instanceof AccessDeniedException){
+            setStatus(response, SC_FORBIDDEN);
             return;
         }
     }

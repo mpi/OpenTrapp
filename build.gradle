@@ -1,5 +1,15 @@
+buildscript{
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.ajoberstar:gradle-git:0.6.3'
+    }
+}
+
 apply plugin: 'war'
 apply plugin: 'jetty'
+apply plugin: 'github-pages'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.9'
@@ -115,3 +125,12 @@ test {
     scanForTestClasses = true
     exclude '**/*Setup'
 }
+
+githubPages {
+    repoUri = 'git@github.com:Pragmatists/OpenTrapp.git'
+    pages {
+        from 'src/main/webapp'
+    }
+}
+
+task publishConcordion(dependsOn: [publishGhPages]) {}
