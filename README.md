@@ -11,5 +11,5 @@ In order to build:
 ```
 REST API test specification:
 ```
-  build/reports/api-specification/concordion/Concordion.html
+  http://pragmatists.github.io/OpenTrapp
 ```
