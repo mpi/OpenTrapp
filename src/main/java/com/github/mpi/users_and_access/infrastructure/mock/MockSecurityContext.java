@@ -33,7 +33,7 @@ public class MockSecurityContext {
     @Autowired
     private Filter springSecurityFilterChain;
     
-    private boolean mockModeEnabled = false;
+    private boolean mockModeEnabled = true;
     
     public void disableAtAll(){
         mockModeEnabled = false;
