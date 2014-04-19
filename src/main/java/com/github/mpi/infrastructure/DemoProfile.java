@@ -1,12 +1,24 @@
 package com.github.mpi.infrastructure;
 
-import com.github.mpi.time_registration.domain.*;
-import com.github.mpi.time_registration.domain.time.Day;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import com.github.mpi.time_registration.domain.EmployeeID;
+import com.github.mpi.time_registration.domain.ProjectName;
+import com.github.mpi.time_registration.domain.WorkLogEntry;
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
+import com.github.mpi.time_registration.domain.Workload;
+import com.github.mpi.time_registration.domain.time.Day;
 
 @Component
 @Profile("demo")
@@ -14,18 +26,34 @@ public class DemoProfile {
 
     @Autowired
     private WorkLogEntryRepository repository;
+    
+    private Random random = new Random();;
 
     @PostConstruct
     void init(){
 
-        repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.01"), Workload.of("8h"), new ProjectName("ProjectManhattan"), new EmployeeID("homer.simpson"), Day.of("2014/03/03")));
-        repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.02"), Workload.of("6h"), new ProjectName("ProjectManhattan"), new EmployeeID("bart.simpson"), Day.of("2014/02/01")));
-        repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.03"), Workload.of("4h"), new ProjectName("ProjectManhattan"), new EmployeeID("bart.simpson"), Day.of("2014/02/04")));
-        repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.04"), Workload.of("6h"), new ProjectName("ApolloProgram"), new EmployeeID("homer.simpson"), Day.of("2014/03/12")));
-        repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.05"), Workload.of("7h 15m"), new ProjectName("ProjectManhattan"), new EmployeeID("marge.simpson"), Day.of("2014/01/17")));
-        repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.06"), Workload.of("8h"), new ProjectName("ApolloProgram"), new EmployeeID("marge.simpson"), Day.of("2014/03/12")));
-        repository.store(new WorkLogEntry(new WorkLogEntry.EntryID("WL.07"), Workload.of("1h 30m"), new ProjectName("ApolloProgram"), new EmployeeID("homer.simpson"), Day.of("2014/03/30")));
+        List<String> employees = Arrays.asList("homer.simpson", "bart.simpson", "marge.simpson", "principal skinner", "mr.burns");
+        List<String> workloads = Arrays.asList("8h", "8h", "8h", "4h 15m", "2h 30m", "1d 2h", "45m", "1h", "6h 40m", "7h");
+        List<String> projects = Arrays.asList("ProjectManhattan", "ApolloProgram", "Internal", "Other");
+        String workloadPattern = "WL.%s";
+        String dayPattern =  new SimpleDateFormat("YYYY/MM").format(new Date()) + "/%2d";
+        int worklogEntriesCount = 50;
+        
+        for(int i=0; i< worklogEntriesCount; i++){
+            
+            EntryID id = new EntryID(String.format(workloadPattern, i));
+            Workload workload = Workload.of(random(workloads));
+            ProjectName projectName = new ProjectName(random(projects));
+            EmployeeID employeeID = new EmployeeID(random(employees));
+            Day day = Day.of(String.format(dayPattern, random.nextInt(20) + 1));
+            
+            repository.store(new WorkLogEntry(id, workload, projectName, employeeID, day));
+        }
 
+    }
+
+    private String random(List<String> list) {
+        return list.get(random.nextInt(list.size()));
     }
 
 }
