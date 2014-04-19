@@ -28,7 +28,6 @@ public class ApiAcceptanceTestRunner extends ConcordionRunner {
         injector.autowireBeanProperties(test, AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, true);
     }
 
-    @SuppressWarnings("resource")
     private AutowireCapableBeanFactory adHocInjector() {
         AnnotationConfigApplicationContext adHocAutowiringContext 
             = new AnnotationConfigApplicationContext(AutowiredAnnotationBeanPostProcessor.class);

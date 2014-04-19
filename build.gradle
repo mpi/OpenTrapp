@@ -98,11 +98,11 @@ jettyRun.contextPath = ''
 
 task apiTest(type:Test) {
     
+    ignoreFailures = true
     systemProperty 'concordion.output.dir', "$buildDir/reports/api-specification"
     description = "Run acceptance tests against REST API"
     testClassesDir = project.sourceSets.api.output.classesDir
     classpath = project.sourceSets.api.runtimeClasspath + files("$rootDir/src/test/api")
-
     exclude '**/*Fixture.class'
 }
 
@@ -129,8 +129,8 @@ test {
 githubPages {
     repoUri = 'git@github.com:Pragmatists/OpenTrapp.git'
     pages {
-        from 'src/main/webapp'
+        from 'build/reports/api-specification'
     }
 }
 
-task publishConcordion(dependsOn: [publishGhPages]) {}
+task publishConcordion(dependsOn: [apiTest, publishGhPages]) {}
