@@ -127,10 +127,17 @@ test {
 }
 
 githubPages {
-    repoUri = 'git@github.com:Pragmatists/OpenTrapp.git'
     pages {
         from 'build/reports/api-specification'
     }
+}
+
+task useMpi << {
+    githubPages.repoUri = 'git@github.com:mpi/OpenTrApp.git'
+}
+
+task useProd << {
+    githubPages.repoUri = 'git@github.com:Pragmatists/OpenTrapp.git'
 }
 
 task publishConcordion(dependsOn: [apiTest, publishGhPages]) {}
