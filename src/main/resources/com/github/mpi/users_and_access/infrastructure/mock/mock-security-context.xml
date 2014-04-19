@@ -7,7 +7,7 @@
     >
 
 	<bean id="fixedOpenIDProviderFilter" class="com.github.mpi.users_and_access.infrastructure.spring.FixedOpenIDProviderFilter">
-		<property name="providerUrl" value="http://localhost:8080/MockOpenID/discover"/>
+		<property name="providerUrl" value="http://open-trapp-mpi.herokuapp.com/MockOpenID/discover"/>
 	</bean>
  
 </beans>
