@@ -13,6 +13,8 @@ import org.openid4java.message.DirectError;
 import org.openid4java.message.Message;
 import org.openid4java.message.ParameterList;
 import org.openid4java.message.ax.FetchResponse;
+import org.openid4java.server.InMemoryServerAssociationStore;
+import org.openid4java.server.ServerAssociationStore;
 import org.openid4java.server.ServerManager;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,18 +27,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class MockOpenIDServer {
 
-    public ServerManager manager = new ServerManager();
+    private ServerAssociationStore store = new InMemoryServerAssociationStore();
 
     private String username = "homer.simpson";
     private String firstName = "Homer";
     private String lastName = "Simpson";
     private boolean authenticated = true;
     
-    public MockOpenIDServer() {
-        manager.setOPEndpointUrl("http://localhost:8080/MockOpenID/authenticate");
+    private String serverUrl(HttpServletRequest request) {
+        return request.getRequestURL().toString().replaceAll(request.getRequestURI(), "");
     }
-
+    
     public String processRequest(HttpServletRequest httpReq, HttpServletResponse httpResp) throws Exception {
+
+        ServerManager manager = new ServerManager();
+        manager.setSharedAssociations(store);
+        manager.setOPEndpointUrl(serverUrl(httpReq) + "/MockOpenID/authenticate");
 
         ParameterList request = new ParameterList(httpReq.getParameterMap());
 
@@ -50,7 +56,7 @@ public class MockOpenIDServer {
             responseText = response.keyValueFormEncoding();
         } else if ("checkid_setup".equals(mode) || "checkid_immediate".equals(mode)) {
             
-            String userSelectedId = "http://localhost:8080/MockOpenID/id/" + username;
+            String userSelectedId = serverUrl(httpReq) + "/MockOpenID/id/" + username;
             String userSelectedClaimedId = userSelectedId;
             Boolean authenticatedAndApproved = authenticated;
 

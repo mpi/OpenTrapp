@@ -20,12 +20,16 @@ public class MockOpenIDEndpoint {
     @Autowired
     private MockOpenIDServer server;
     
+    @Autowired
+    private HttpServletRequest request;
+    
     @RequestMapping(
             value="/MockOpenID/discover",
             method=GET,
             produces="application/xrds+xml"
             )
     public @ResponseBody String yadis(){
+        
         return "<xrds:XRDS xmlns:xrds=\"xri://$xrds\" xmlns=\"xri://$xrd*($v*2.0)\">" +
         		    "<XRD>" +
         		        "<Service priority=\"0\">" +
@@ -34,10 +38,14 @@ public class MockOpenIDEndpoint {
         		            "<Type>http://specs.openid.net/extensions/ui/1.0/mode/popup</Type>" +
         		            "<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>" +
         		            "<Type>http://specs.openid.net/extensions/pape/1.0</Type>" +
-        		            "<URI>http://localhost:8080/MockOpenID/authenticate</URI>" +
+        		            "<URI>" + serverUrl() + "/MockOpenID/authenticate</URI>" +
         		        "</Service>" +
         		    "</XRD>" +
         		"</xrds:XRDS>";
+    }
+
+    private String serverUrl() {
+        return request.getRequestURL().toString().replaceAll(request.getRequestURI(), "");
     }
     
     @RequestMapping(
@@ -75,7 +83,7 @@ public class MockOpenIDEndpoint {
                         "<Type>http://specs.openid.net/extensions/ui/1.0/mode/popup</Type>" +
                         "<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>" +
                         "<Type>http://specs.openid.net/extensions/pape/1.0</Type>" +
-                        "<URI>http://localhost:8080/MockOpenID/authenticate</URI>" +
+                        "<URI>" + serverUrl() + "/MockOpenID/authenticate</URI>" +
                     "</Service>" +
                 "</XRD>" +
                "</xrds:XRDS>";
