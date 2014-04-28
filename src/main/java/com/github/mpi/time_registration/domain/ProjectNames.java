@@ -5,6 +5,6 @@ import com.github.mpi.time_registration.domain.time.Day;
 
 public interface ProjectNames extends Iterable<ProjectName>{
 
-    ProjectNames after(Day day);
+    public ProjectNames after(Day day);
     
 }

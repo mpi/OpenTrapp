@@ -36,6 +36,7 @@ public class MongoProjectNamesTest extends ProjectNamesContractTest{
         repository = new MongoWorkLogEntryRepository(mongo);
         projectNames = new MongoProjectNames(mongo);
         mongo.dropCollection(WorkLogEntry.class);
+        mongo.createCollection(WorkLogEntry.class);
     }
 
     @Override

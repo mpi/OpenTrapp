@@ -41,7 +41,7 @@ public abstract class ProjectNamesContractTest {
     }
     
     @Test
-    public void shouldListProjectLimitedByNumberOfMonts() throws Exception {
+    public void shouldListProjectLimitedByNumberOfMonths() throws Exception {
         
         // given:
         followingWorkLogEntriesExist(worklogEntryFor("OldProject", "2013/12/31"), worklogEntryFor("RecentProject", "2014/03/01"));

@@ -1,24 +1,22 @@
 package com.github.mpi.time_registration.infrastructure.persistence.mongo;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 
 import com.github.mpi.time_registration.domain.ProjectName;
 import com.github.mpi.time_registration.domain.ProjectNames;
-import com.github.mpi.time_registration.domain.WorkLogEntry;
 import com.github.mpi.time_registration.domain.time.Day;
+import com.mongodb.DBObject;
 
 public class MongoProjectNames implements ProjectNames {
 
     private final MongoTemplate mongo;
     
-    private Day after;
+    private Day after = Day.of("1900/01/01");
 
     public MongoProjectNames(MongoTemplate mongo) {
         this.mongo = mongo;
@@ -27,18 +25,25 @@ public class MongoProjectNames implements ProjectNames {
     @Override
     public Iterator<ProjectName> iterator() {
 
-        Criteria criteria = new Criteria();
-        if(after != null) {
-            criteria = Criteria.where("day.date").gte(after.toString());
-        }
-    
-        List<WorkLogEntry> all = mongo.find(Query.query(criteria), WorkLogEntry.class);
+        String mapJS =
+                "function () {"+
+                "    if(this.day.date >= '" + after.toString() + "')" +
+                "        emit(this.projectName.name, 1);" +
+                "}";
+     
+        String reduceJS = 
+                "function (key, values) { "+
+                "    return Array.sum(values); " +
+                "}";
 
-        Set<ProjectName> names = new HashSet<ProjectName>();
-        for (WorkLogEntry workLogEntry: all){
-            names.add(workLogEntry.projectName());
+        MapReduceResults<DBObject> results = mongo.mapReduce("workLogEntry", mapJS, reduceJS, DBObject.class);
+        
+        List<ProjectName> projectNames = new ArrayList<>();
+        
+        for (DBObject o : results) {
+           projectNames.add(new ProjectName(o.get("_id").toString()));
         }
-        return names.iterator();
+        return projectNames.iterator();
     }
 
     @Override
