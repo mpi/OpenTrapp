@@ -23,8 +23,8 @@ Open Time Registration Application
  * ```demo``` - populate database with sample data.
  
 ### Examples:
- * ```gradle runJetty -Dspring.profiles.active=transients,mock-security,demo```
- * ```gradle runJetty -Dspring.profiles.active=mongo,mongo-lab,spring-security```
+ * ```gradle jettyRun -Dspring.profiles.active=transients,mock-security,demo```
+ * ```gradle jettyRun -Dspring.profiles.active=mongo,mongo-lab,spring-security```
  
 ## REST API executable specification:
 [http://pragmatists.github.io/OpenTrapp](http://pragmatists.github.io/OpenTrapp)
