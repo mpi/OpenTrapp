@@ -1,22 +1,16 @@
 package concordion.authorization;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import support.ApiFixture;
-
-import com.github.mpi.time_registration.domain.EmployeeID;
-import com.github.mpi.time_registration.domain.ProjectName;
-import com.github.mpi.time_registration.domain.WorkLogEntry;
+import com.github.mpi.time_registration.domain.*;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
-import com.github.mpi.time_registration.domain.Workload;
 import com.github.mpi.time_registration.domain.time.Day;
 import com.github.mpi.users_and_access.infrastructure.mock.MockOpenIDServer;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.filter.session.SessionFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import support.ApiFixture;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class AuthorizationFixture extends ApiFixture {
 

@@ -1,9 +1,6 @@
 package com.github.mpi.users_and_access.infrastructure.spring;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
+import com.github.mpi.users_and_access.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
@@ -12,27 +9,54 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.openid.OpenIDAttribute;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 
-import com.github.mpi.users_and_access.domain.User;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class OpenIDUserService implements AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 
-//    private List<String> allowedUserEmails;
+    private List<String> allowedUserEmailsRegexes = Collections.emptyList();
 
     public void setAllowedUserEmails(List<String> allowedUserEmails) {
-//        this.allowedUserEmails = allowedUserEmails;
+        this.allowedUserEmailsRegexes = allowedUserEmails;
     }
 
     @Override
     public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
 
         List<OpenIDAttribute> attributes = token.getAttributes();
-        String email = readAttribute(attributes, "Email").split("@")[0];
-        String fullName = String.format("%s %s", readAttribute(attributes, "FirstName"), readAttribute(attributes, "LastName"));
-//        if (!allowedUserEmails.contains(email)) {
-//            throw new UsernameNotFoundException(email);
-//        }
+        String email = emailFrom(attributes);
+        if (isNotAllowed(email)) {
+            throw new UsernameNotFoundException(email);
+        }
 
-        return new OpenIDUserAdapter(email, fullName);
+        return new OpenIDUserAdapter(userNameFrom(email), fullNameFrom(attributes));
+    }
+
+    private String emailFrom(List<OpenIDAttribute> attributes) {
+        return readAttribute(attributes, "Email");
+    }
+
+    private String fullNameFrom(List<OpenIDAttribute> attributes) {
+        return String.format("%s %s", readAttribute(attributes, "FirstName"), readAttribute(attributes, "LastName"));
+    }
+
+    private String userNameFrom(String email) {
+        return email.split("@")[0];
+    }
+
+    private boolean isNotAllowed(String email) {
+        return !isAllowed(email);
+    }
+
+    private boolean isAllowed(String email) {
+        for (String emailRegex : allowedUserEmailsRegexes) {
+            if (Pattern.compile(emailRegex).matcher(email).matches())
+                return true;
+        }
+        return false;
     }
 
     private String readAttribute(List<OpenIDAttribute> attributes, String name) {
@@ -77,10 +101,6 @@ public class OpenIDUserService implements AuthenticationUserDetailsService<OpenI
             return super.username();
         }
 
-        public String getFullName() {
-            return super.displayName();
-        }
-        
         @Override
         public String getPassword() {
             return null;

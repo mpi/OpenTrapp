@@ -1,13 +1,5 @@
 package com.github.mpi.users_and_access.infrastructure.mock;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.openid4java.message.AuthSuccess;
 import org.openid4java.message.DirectError;
 import org.openid4java.message.Message;
@@ -18,6 +10,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Based on: https://code.google.com/p/openid4java/wiki/SampleServer
  */
@@ -27,11 +26,16 @@ public class MockOpenIDServer {
 
     public ServerManager manager = new ServerManager();
 
+    private boolean authenticated = true;
     private String username = "homer.simpson";
     private String firstName = "Homer";
     private String lastName = "Simpson";
-    private boolean authenticated = true;
-    
+    private String email = emailOf(username);
+
+    private String emailOf(String username) {
+        return username + "@springfield.com";
+    }
+
     public MockOpenIDServer() {
         manager.setOPEndpointUrl("http://localhost:8080/MockOpenID/authenticate");
     }
@@ -62,7 +66,7 @@ public class MockOpenIDServer {
                 map.put("ns.ext1", "http://openid.net/srv/ax/1.0");
                 map.put("mode", "fetch_response");
                 map.put("type.Email", "http://schema.openid.net/contact/email");
-                map.put("value.Email", username);
+                map.put("value.Email", email);
                 map.put("type.FirstName", "http://axschema.org/namePerson/first");
                 map.put("value.FirstName", firstName);
                 map.put("type.LastName", "http://axschema.org/namePerson/last");
@@ -105,6 +109,7 @@ public class MockOpenIDServer {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
+        this.email = emailOf(username);
     }
 
     public void setUnauthenticated() {
@@ -112,5 +117,6 @@ public class MockOpenIDServer {
         this.firstName = "";
         this.lastName = "";
         this.username = "";
+        this.email = "";
     }
 }

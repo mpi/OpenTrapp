@@ -52,7 +52,8 @@
     <beans:bean id="userService" class="com.github.mpi.users_and_access.infrastructure.spring.OpenIDUserService">
         <beans:property name="allowedUserEmails">
             <beans:list>
-                <beans:value>mpi.michal.piotrkowski@gmail.com</beans:value>
+                <beans:value>^.*@pragmatists.pl$</beans:value>
+                <beans:value>^.*@springfield.com$</beans:value>
             </beans:list>
         </beans:property>
     </beans:bean>
