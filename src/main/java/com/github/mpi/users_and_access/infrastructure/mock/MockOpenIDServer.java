@@ -27,12 +27,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class MockOpenIDServer {
 
-    private ServerAssociationStore store = new InMemoryServerAssociationStore();
+    private ServerManager manager = new ServerManager();
 
     private String username = "homer.simpson";
     private String firstName = "Homer";
     private String lastName = "Simpson";
     private boolean authenticated = true;
+    
+
+    public MockOpenIDServer() {
+    }
     
     private String serverUrl(HttpServletRequest request) {
         return request.getRequestURL().toString().replaceAll(request.getRequestURI(), "");
@@ -40,8 +44,6 @@ public class MockOpenIDServer {
     
     public String processRequest(HttpServletRequest httpReq, HttpServletResponse httpResp) throws Exception {
 
-        ServerManager manager = new ServerManager();
-        manager.setSharedAssociations(store);
         manager.setOPEndpointUrl(serverUrl(httpReq) + "/MockOpenID/authenticate");
 
         ParameterList request = new ParameterList(httpReq.getParameterMap());
