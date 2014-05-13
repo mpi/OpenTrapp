@@ -1,6 +1,5 @@
 <html
-    xmlns:concordion="http://www.concordion.org/2007/concordion"
-    xmlns:json="https://github.com/mpi/OpenTrApp">
+        xmlns:concordion="http://www.concordion.org/2007/concordion">
 
 <body>
 
@@ -10,7 +9,7 @@
 
         <div>
             <h3>
-                <b>Background</b>:
+                Background:
             </h3>
             <ul>
                 <li>Given user <b>Homer</b> already exists</li>
@@ -20,13 +19,36 @@
         <div class="example">
 
             <h3>
-                <u>Example 1</u>: Creating new Work Log Entry
+                <u>Example 1</u>: Response status of a successful request
             </h3>
 
             <ul concordion:execute="clear()">
-                <li>Given client has been authenticated as <b concordion:set="#method">Homer</b></li>
-                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
-                <li>And request body contains following data:
+                <li>When a valid <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code>
+                </li>
+                <li>
+<pre class="hide" concordion:execute="body(#TEXT)">{
+    "workload": "1h 30m",
+    "projectName": "ApiDesign",
+    "day": "2014/01/01"
+}</pre>
+                </li>
+                <li>
+                    Then the <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to
+                    <b concordion:assertEquals="status()">HTTP/1.1 201 Created</b>
+                </li>
+            </ul>
+        </div>
+
+        <div class="example">
+
+            <h3>
+                <u>Example 2</u>: Creating a new Work Log Entry
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>When a <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code>
+                </li>
+                <li>And the request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",
     "projectName": "ApiDesign",
@@ -34,56 +56,22 @@
 }
 </pre>
                 </li>
-                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 201 Created</b></li>
-                <li>And following work log entries should exist:
+                <li concordion:execute="request(#method, #endpoint)">Then a following work log entry should be saved:
                     <table concordion:verifyRows="#entry : allWorkLogEntries()">
                         <thead>
                             <tr>
                                 <th concordion:assertEquals="#entry.project">Project</th>
                                 <th concordion:assertEquals="#entry.workload">Workload</th>
                                 <th concordion:assertEquals="#entry.employee">Employee</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td> ApiDesign </td>
-                                <td> 1h 30m    </td>
-                                <td> Homer     </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </li>
-            </ul>
-        </div>
-
-        <div class="example">
-
-            <h3>
-                <u>Example 2</u>: Creating new Work Log Entry (for given day)
-            </h3>
-
-            <ul concordion:execute="clear()">
-                <li>Given client has been authenticated as <b concordion:set="#method">Homer</b></li>
-                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
-                <li>And request body contains following data:
-<pre concordion:execute="body(#TEXT)">{
-    "workload": "1h 30m",
-    "projectName": "ApiDesign",
-    "day": "2013/12/31"
-}
-</pre>
-                </li>
-                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 201 Created</b></li>
-                <li>And following work log entries should exist:
-                    <table concordion:verifyRows="#entry : allWorkLogEntries()">
-                        <thead>
-                            <tr>
                                 <th concordion:assertEquals="#entry.day">Day</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                     <td>2013/12/31</td>
+                                <td>ApiDesign</td>
+                                <td>1h 30m</td>
+                                <td>Homer</td>
+                                <td>2014/01/01</td>
                             </tr>
                         </tbody>
                     </table>
@@ -94,38 +82,22 @@
         <div class="example">
 
             <h3>
-                <u>Example 3</u>: Response of successful request
+                <u>Example 3</u>: Invalid Work Log Expression
             </h3>
 
             <ul concordion:execute="clear()">
-                <li>Given client has been authenticated as <b concordion:set="#method">Homer</b></li>
-                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
-                <li>And request body contains following data:
-<pre concordion:execute="body(#TEXT)">{
-    "workload": "1h 30m",
-    "projectName": "ApiDesign",
-    "day": "2014/01/01"
-}</pre>
+                <li>When a <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code>
                 </li>
-                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 201 Created</b></li>
-            </ul>
-        </div>
-
-        <div class="example">
-
-            <h3>
-                <u>Example 4</u>: Invalid Work Log Expression
-            </h3>
-
-            <ul concordion:execute="clear()">
-                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
                 <li>And request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m"
 }
 </pre>
                 </li>
-                <li>Then <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to <b concordion:assertEquals="status()">HTTP/1.1 400 Bad Request</b></li>
+                <li>
+                    Then the <span concordion:execute="request(#method, #endpoint)">response</span> status should be equal to
+                    <b concordion:assertEquals="status()">HTTP/1.1 400 Bad Request</b>
+                </li>
             </ul>
         </div>
 <!-- 
@@ -139,7 +111,7 @@
             </h3>
 
             <ul concordion:execute="clear()">
-                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
+                <li>When <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Homer/work-log/entries</code></li>
                 <li>And content type is set to <b concordion:execute="contentType(#TEXT)">text/html</b>
                 </li>
                 <li>And request body contains following data:
@@ -165,7 +137,7 @@
             </h3>
 
             <ul concordion:execute="clear()">
-                <li>When <b concordion:set="#method">POST</b> request is being send to: <code concordion:set="#endpoint">/endpoints/v1/employee/Unknown/work-log/entries</code></li>
+                <li>When <b concordion:set="#method">POST</b> request is sent to: <code concordion:set="#endpoint">/endpoints/v1/employee/Unknown/work-log/entries</code></li>
                 <li>And request body contains following data:
 <pre concordion:execute="body(#TEXT)">{
     "workload": "1h 30m",

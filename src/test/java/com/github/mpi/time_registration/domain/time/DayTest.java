@@ -76,7 +76,24 @@ public class DayTest extends ValueObjectContractTest{
         // then:
         assertThat(day.toString()).isEqualTo("2012/01/01");
     }
-    
+
+    @Test
+    public void shouldCheckIfIsDayOfMonth() {
+        Day day = Day.of("2013/03/13");
+        Month march=Month.of("2013/03");
+
+        assertThat(day.in(march)).isTrue();
+    }
+
+    @Test
+    public void shouldCheckIfIsNotDayOfMonth() {
+        Day day = Day.of("2013/03/13");
+        Month march=Month.of("2013/04");
+
+        assertThat(day.in(march)).isFalse();
+    }
+
+
     @Override
     protected Day aValue() {
         return Day.of("2013/11/05");
