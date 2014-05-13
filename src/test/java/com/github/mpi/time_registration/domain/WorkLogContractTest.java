@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.time.Day;
+import com.github.mpi.time_registration.domain.time.DisjointMonths;
+import com.github.mpi.time_registration.domain.time.Month;
+import com.github.mpi.time_registration.domain.time.Period;
 
 public abstract class WorkLogContractTest {
 
@@ -89,52 +92,46 @@ public abstract class WorkLogContractTest {
         // then:
         assertThat(workLog).containsExactly(relevantEntry);
     }
-    
-    @Test
-    public void shouldReturnWorkLogBeforeDayOnly() throws Exception {
 
-        WorkLogEntry beforeValentines = anEntryOnDay("Before Valentine's Day", Day.of("2014/02/01"));
+
+
+    @Test
+    public void shouldRetunWorkLogForGivenMonth() throws Exception{
+        WorkLogEntry beforeValentines = anEntryOnDay("Before Valentine's Day", Day.of("2014/01/01"));
         WorkLogEntry valentines = anEntryOnDay("On Valentine's Day", Day.of("2014/02/14"));
-        WorkLogEntry afterValentines = anEntryOnDay("After Valentine's Day", Day.of("2014/02/24"));
+        WorkLogEntry afterValentines = anEntryOnDay("After Valentine's Day", Day.of("2014/03/24"));
 
         // given:
         repositoryContainsFollowingEntries(beforeValentines, valentines, afterValentines);
         // when:
-        WorkLog log = repository.loadAll().before(Day.of("2014/02/14"));
-        // then:
-        assertThat(log).containsOnly(valentines, beforeValentines);
-    }
-    
-    @Test
-    public void shouldReturnWorkLogAfterDayOnly() throws Exception {
-        
-        WorkLogEntry beforeValentines = anEntryOnDay("Before Valentine's Day", Day.of("2014/02/01"));
-        WorkLogEntry valentines = anEntryOnDay("On Valentine's Day", Day.of("2014/02/14"));
-        WorkLogEntry afterValentines = anEntryOnDay("After Valentine's Day", Day.of("2014/02/24"));
-        
-        // given:
-        repositoryContainsFollowingEntries(beforeValentines, valentines, afterValentines);
-        // when:
-        WorkLog log = repository.loadAll().after(Day.of("2014/02/14"));
-        // then:
-        assertThat(log).containsOnly(valentines, afterValentines);
-    }
-    
-    @Test
-    public void shouldReturnWorkLogBetweenDates() throws Exception {
-        
-        WorkLogEntry beforeValentines = anEntryOnDay("Before Valentine's Day", Day.of("2014/02/01"));
-        WorkLogEntry valentines = anEntryOnDay("On Valentine's Day", Day.of("2014/02/14"));
-        WorkLogEntry afterValentines = anEntryOnDay("After Valentine's Day", Day.of("2014/02/24"));
-        
-        // given:
-        repositoryContainsFollowingEntries(beforeValentines, valentines, afterValentines);
-        // when:
-        WorkLog log = repository.loadAll().after(Day.of("2014/02/14")).before(Day.of("2014/02/14"));
+        WorkLog log = repository.loadAll().in(Month.of("2014/02"));
         // then:
         assertThat(log).containsOnly(valentines);
     }
-    
+    @Test
+    public void shouldRetunWorkLogForGivenMonths() throws Exception{
+        WorkLogEntry beforeValentines = anEntryOnDay("Before Valentine's Day", Day.of("2014/01/01"));
+        WorkLogEntry valentines = anEntryOnDay("On Valentine's Day", Day.of("2014/02/14"));
+        WorkLogEntry christmasDay= anEntryOnDay("On Christmas Day", Day.of("2014/12/25"));
+        WorkLogEntry afterValentines = anEntryOnDay("After Valentine's Day", Day.of("2014/03/24"));
+
+        // given:
+        repositoryContainsFollowingEntries(beforeValentines, valentines, afterValentines,christmasDay);
+
+        // when:
+        WorkLog log = repository.loadAll().in(periodContaining(Month.of("2014/02"),Month.of("2014/12")));
+        // then:
+        assertThat(log).containsOnly(valentines,christmasDay);
+    }
+
+    private Period periodContaining(Month... months) {
+        DisjointMonths period = new DisjointMonths();
+        for (Month month : months) {
+            period.include(month);
+        }
+        return period;
+    }
+
     // --
     
     private WorkLogEntry anEntryOnDay(String id, Day day) {

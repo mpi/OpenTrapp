@@ -102,5 +102,21 @@ public class MonthTest extends ValueObjectContractTest {
         // then:
         assertThat(firstDay).isEqualTo(Day.of("2012/02/29"));
     }
-    
+
+    @Test
+    public void shouldCheckIfContainsDay() {
+        Month month = Month.of("1997/03");
+        Day day = Day.of("1997/03/13");
+
+        assertThat(month.contains(day)).isTrue();
+    }
+
+    @Test
+    public void shouldCheckIfDoesNotContainDay() {
+        Month month = Month.of("1997/03");
+        Day day = Day.of("1997/04/13");
+
+        assertThat(month.contains(day)).isFalse();
+
+    }
 }
