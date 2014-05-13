@@ -1,15 +1,13 @@
 package concordion.authentication;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import support.ApiFixture;
-
 import com.github.mpi.users_and_access.infrastructure.mock.MockOpenIDServer;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.filter.session.SessionFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import support.ApiFixture;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class AuthenticationFixture extends ApiFixture {
 
@@ -35,7 +33,7 @@ public class AuthenticationFixture extends ApiFixture {
     public void loggedInAs(final String displayName, final String username) throws UnsupportedEncodingException{
         String firstName = displayName.split(" ")[0];
         String lastName = displayName.split(" ")[1];
-        openID.setAuthenticatedAs(username, firstName, lastName);
+        openID.setAuthenticatedAsPrivileged(username, firstName, lastName);
         
         login();
     }
@@ -84,7 +82,12 @@ public class AuthenticationFixture extends ApiFixture {
     }
 
     public void loginSuccessfully(String url) {
-        openID.setAuthenticatedAs("homer.simpson", "Homer", "Simpson");
+        openID.setAuthenticatedAsPrivileged("homer.simpson", "Homer", "Simpson");
+        login(url);
+    }
+
+    public void loginUnsuccessfully(String url) {
+        openID.setAuthenticatedAsUnprivileged("homer.simpson", "Homer", "Simpson");
         login(url);
     }
     

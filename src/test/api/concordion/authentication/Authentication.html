@@ -43,13 +43,13 @@
         </div> 
         <div class="example">
             <h3>
-                <u>Example 4</u>: Redirect after login
+                <u>Example 3</u>: Redirect after login
             </h3>
 
             <ul concordion:execute="clear()">
                 <li>Given user is <span concordion:execute="unauthenticated()">unauthenticated</span></li>
                 <li>When user login with url <code concordion:set="#loginUrl">/endpoints/v1/authentication/login?redirect_to=/expected_redirect_site.com/page/</code></li>
-                <li>Then if user authenticate <b concordion:execute="loginSuccessfully(#loginUrl)">sucessfully</b></li>
+                <li>Then if user authenticate <b concordion:execute="loginSuccessfully(#loginUrl)">successfully</b></li>
                 <li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/expected_redirect_site.com/page/#/authToken/{sessionId}</pre></li>
             </ul>
         </div>        
@@ -61,10 +61,22 @@
             <ul concordion:execute="clear()">
                 <li>Given user is <span concordion:execute="unauthenticated()">unauthenticated</span></li>
                 <li>When user login with url <code concordion:set="#loginUrl">/endpoints/v1/authentication/login</code></li>
-                <li>Then if user authenticate <b concordion:execute="loginSuccessfully(#loginUrl)">sucessfully</b></li>
+                <li>Then if user authenticate <b concordion:execute="loginSuccessfully(#loginUrl)">successfully</b></li>
                 <li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/endpoints/v1/authentication/status/#/authToken/{sessionId}</pre></li>
             </ul>
-        </div> 
+        </div>
+        <div class="example">
+            <h3>
+                <u>Example 5</u>: Redirect after unsuccessful login
+            </h3>
+
+            <ul concordion:execute="clear()">
+                <li>Given user is <span concordion:execute="unauthenticated()">unauthenticated</span></li>
+                <li>When user login with url <code concordion:set="#loginUrl">/endpoints/v1/authentication/login</code></li>
+                <li>Then if user authenticate <b concordion:execute="loginUnsuccessfully(#loginUrl)">unsuccessfully</b></li>
+                <li>I should be eventually redirected to <pre concordion:assertEquals="redirectedPage()">/endpoints/v1/authentication/status/#/authFailed</pre></li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>

@@ -1,16 +1,15 @@
 package com.github.mpi.users_and_access.infrastructure.spring;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class RedirectToStatus implements AuthenticationSuccessHandler, AuthenticationFailureHandler, LogoutSuccessHandler{
 
@@ -18,7 +17,7 @@ public class RedirectToStatus implements AuthenticationSuccessHandler, Authentic
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
             throws IOException, ServletException {
         
-        response.sendRedirect(computeRedirectionUrl(request));
+        response.sendRedirect(computeRedirectionUrl(request) + "#/authFailed");
     }
 
     @Override

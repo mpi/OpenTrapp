@@ -30,9 +30,9 @@ public class MockOpenIDServer {
     private String username = "homer.simpson";
     private String firstName = "Homer";
     private String lastName = "Simpson";
-    private String email = emailOf(username);
+    private String email = privilegedEmailOf(username);
 
-    private String emailOf(String username) {
+    private String privilegedEmailOf(String username) {
         return username + "@springfield.com";
     }
 
@@ -58,11 +58,11 @@ public class MockOpenIDServer {
             String userSelectedClaimedId = userSelectedId;
             Boolean authenticatedAndApproved = authenticated;
 
-            response = manager.authResponse(request, userSelectedId, userSelectedClaimedId, authenticatedAndApproved.booleanValue(), false);
+            response = manager.authResponse(request, userSelectedId, userSelectedClaimedId, authenticatedAndApproved, false);
 
             if(response instanceof AuthSuccess){
 
-                Map<String, String> map = new HashMap<String, String>();
+                Map<String, String> map = new HashMap<>();
                 map.put("ns.ext1", "http://openid.net/srv/ax/1.0");
                 map.put("mode", "fetch_response");
                 map.put("type.Email", "http://schema.openid.net/contact/email");
@@ -104,12 +104,24 @@ public class MockOpenIDServer {
         return null;
     }
 
-    public void setAuthenticatedAs(String username, String firstName, String lastName){
+    public void setAuthenticatedAsPrivileged(String username, String firstName, String lastName){
         this.authenticated = true;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.email = emailOf(username);
+        this.email = privilegedEmailOf(username);
+    }
+
+    public void setAuthenticatedAsUnprivileged(String username, String firstName, String lastName){
+        this.authenticated = true;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = unprivilegedEmailOf(username);
+    }
+
+    private String unprivilegedEmailOf(String username) {
+        return username + "@unprivileged.eu";
     }
 
     public void setUnauthenticated() {

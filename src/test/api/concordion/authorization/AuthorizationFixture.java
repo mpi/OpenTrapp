@@ -51,7 +51,7 @@ public class AuthorizationFixture extends ApiFixture {
     }
     
     public void loggedInAs(String username) throws UnsupportedEncodingException{
-        openID.setAuthenticatedAs(username, username, username);
+        openID.setAuthenticatedAsPrivileged(username, username, username);
         login();
     }
 
