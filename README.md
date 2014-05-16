@@ -11,7 +11,7 @@ Open Time Registration Application
 ```
 ## Starting server:
 ```
-  gradle runJetty -Dspring.profiles.active={profilesToActivate}
+  gradle jettyRun -Dspring.profiles.active={profilesToActivate}
 ```
 ### Available profiles:
  * ```transients``` - use in memory transient persistence (fastest, all data is lost after server restart),
