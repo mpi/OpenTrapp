@@ -65,4 +65,8 @@ public class Day {
     public boolean after(Day day) {
         return date.compareTo(day.date) >= 0;
     }
+
+    public boolean in(Month month) {
+        return after(month.firstDay()) && before(month.lastDay());
+    }
 }

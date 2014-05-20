@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Month {
+public class Month implements Period {
 
     private static Pattern DATE_FORMAT = Pattern.compile("(\\d{4})/(\\d{2})");
 
@@ -77,4 +77,8 @@ public class Month {
         return value;
     }
 
+    @Override
+    public boolean contains(Day day) {
+        return day.in(this);
+    }
 }

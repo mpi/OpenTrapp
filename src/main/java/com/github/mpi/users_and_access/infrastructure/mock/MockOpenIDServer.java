@@ -1,5 +1,13 @@
 package com.github.mpi.users_and_access.infrastructure.mock;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.openid4java.message.AuthSuccess;
 import org.openid4java.message.DirectError;
 import org.openid4java.message.Message;
@@ -10,13 +18,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Based on: https://code.google.com/p/openid4java/wiki/SampleServer
  */
@@ -24,23 +25,24 @@ import java.util.Map;
 @Component
 public class MockOpenIDServer {
 
-    public ServerManager manager = new ServerManager();
+    private ServerManager manager = new ServerManager();
 
-    private boolean authenticated = true;
     private String username = "homer.simpson";
     private String firstName = "Homer";
     private String lastName = "Simpson";
-    private String email = privilegedEmailOf(username);
-
-    private String privilegedEmailOf(String username) {
-        return username + "@springfield.com";
-    }
+    private boolean authenticated = true;
+    
 
     public MockOpenIDServer() {
-        manager.setOPEndpointUrl("http://localhost:8080/MockOpenID/authenticate");
     }
-
+    
+    private String serverUrl(HttpServletRequest request) {
+        return request.getRequestURL().toString().replaceAll(request.getRequestURI(), "");
+    }
+    
     public String processRequest(HttpServletRequest httpReq, HttpServletResponse httpResp) throws Exception {
+
+        manager.setOPEndpointUrl(serverUrl(httpReq) + "/MockOpenID/authenticate");
 
         ParameterList request = new ParameterList(httpReq.getParameterMap());
 

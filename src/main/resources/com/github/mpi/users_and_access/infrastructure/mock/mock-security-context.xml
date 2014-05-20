@@ -3,11 +3,8 @@
     xmlns="http://www.springframework.org/schema/beans" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
-    profile="mock-security"
-    >
+    profile="mock-security">
 
-	<bean id="fixedOpenIDProviderFilter" class="com.github.mpi.users_and_access.infrastructure.spring.FixedOpenIDProviderFilter">
-		<property name="providerUrl" value="http://localhost:8080/MockOpenID/discover"/>
-	</bean>
+	<bean id="fixedOpenIDProviderFilter" class="com.github.mpi.users_and_access.infrastructure.mock.MockOpenIDProviderFilter"/>
  
 </beans>

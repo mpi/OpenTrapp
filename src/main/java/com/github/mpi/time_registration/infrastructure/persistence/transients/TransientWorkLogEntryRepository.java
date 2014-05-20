@@ -3,6 +3,7 @@ package com.github.mpi.time_registration.infrastructure.persistence.transients;
 import com.github.mpi.time_registration.domain.*;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.time.Day;
+import com.github.mpi.time_registration.domain.time.Period;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -16,7 +17,7 @@ import static com.google.common.base.Predicates.*;
 
 public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
 
-    private List<WorkLogEntry> store = new ArrayList<WorkLogEntry>();
+    private List<WorkLogEntry> store = new ArrayList<>();
 
     @Override
     public WorkLog loadAll() {
@@ -94,28 +95,18 @@ public class TransientWorkLogEntryRepository implements WorkLogEntryRepository {
         }
 
         @Override
-        public WorkLog before(final Day day) {
+        public WorkLog in(final Period period) {
             addConstraint(new Predicate<WorkLogEntry>() {
-
                 @Override
-                public boolean apply(WorkLogEntry workLogEntry) {
-                    return workLogEntry.day().before(day);
+                public boolean apply(WorkLogEntry entry) {
+                    return period.contains(entry.day());
                 }
+
             });
             return this;
         }
 
-        @Override
-        public WorkLog after(final Day day) {
-            addConstraint(new Predicate<WorkLogEntry>() {
 
-                @Override
-                public boolean apply(WorkLogEntry workLogEntry) {
-                    return workLogEntry.day().after(day);
-                }
-            });
-            return this;
-        }
 
         private void addConstraint(Predicate<WorkLogEntry> constraint) {
             this.constraints = Predicates.and(constraints, constraint);
