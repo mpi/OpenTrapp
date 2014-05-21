@@ -1,6 +1,5 @@
 package com.github.mpi.time_registration.domain;
 
-import com.github.mpi.time_registration.domain.time.Day;
 import com.github.mpi.time_registration.domain.time.Period;
 
 public interface WorkLog extends Iterable<WorkLogEntry> {

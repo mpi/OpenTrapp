@@ -5,16 +5,14 @@ import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.time.DisjointMonths;
 import com.github.mpi.time_registration.domain.time.Month;
 import com.github.mpi.time_registration.domain.time.Period;
-
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class MongoWorkLogEntryRepository implements WorkLogEntryRepository {
 

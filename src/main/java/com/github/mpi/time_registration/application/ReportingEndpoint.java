@@ -1,11 +1,10 @@
 package com.github.mpi.time_registration.application;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.github.mpi.time_registration.domain.*;
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
 import com.github.mpi.time_registration.domain.time.Day;
+import com.github.mpi.time_registration.domain.time.Month;
+import com.github.mpi.time_registration.domain.time.Periods;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.mpi.time_registration.domain.EmployeeID;
-import com.github.mpi.time_registration.domain.ProjectName;
-import com.github.mpi.time_registration.domain.WorkLog;
-import com.github.mpi.time_registration.domain.WorkLogEntry;
-import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
-import com.github.mpi.time_registration.domain.Workload;
-import com.github.mpi.time_registration.domain.time.Month;
-import com.github.mpi.time_registration.domain.time.Periods;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 @RequestMapping(method = GET,

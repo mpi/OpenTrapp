@@ -2,7 +2,6 @@ package com.github.mpi.time_registration.infrastructure.persistence.transients;
 
 import com.github.mpi.time_registration.domain.*;
 import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.time.Day;
 import com.github.mpi.time_registration.domain.time.Period;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;

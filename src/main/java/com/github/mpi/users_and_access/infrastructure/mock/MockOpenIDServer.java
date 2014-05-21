@@ -1,13 +1,5 @@
 package com.github.mpi.users_and_access.infrastructure.mock;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.openid4java.message.AuthSuccess;
 import org.openid4java.message.DirectError;
 import org.openid4java.message.Message;
@@ -17,6 +9,13 @@ import org.openid4java.server.ServerManager;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Based on: https://code.google.com/p/openid4java/wiki/SampleServer
@@ -31,7 +30,8 @@ public class MockOpenIDServer {
     private String firstName = "Homer";
     private String lastName = "Simpson";
     private boolean authenticated = true;
-    
+    private String email = privilegedEmailOf(username);
+
 
     public MockOpenIDServer() {
     }
@@ -120,6 +120,10 @@ public class MockOpenIDServer {
         this.lastName = lastName;
         this.username = username;
         this.email = unprivilegedEmailOf(username);
+    }
+
+    private String privilegedEmailOf(String username) {
+        return username + "@springfield.com";
     }
 
     private String unprivilegedEmailOf(String username) {

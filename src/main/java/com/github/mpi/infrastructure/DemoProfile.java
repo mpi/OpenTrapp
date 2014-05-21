@@ -1,24 +1,18 @@
 package com.github.mpi.infrastructure;
 
+import com.github.mpi.time_registration.domain.*;
+import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
+import com.github.mpi.time_registration.domain.time.Day;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-
-import com.github.mpi.time_registration.domain.EmployeeID;
-import com.github.mpi.time_registration.domain.ProjectName;
-import com.github.mpi.time_registration.domain.WorkLogEntry;
-import com.github.mpi.time_registration.domain.WorkLogEntry.EntryID;
-import com.github.mpi.time_registration.domain.WorkLogEntryRepository;
-import com.github.mpi.time_registration.domain.Workload;
-import com.github.mpi.time_registration.domain.time.Day;
 
 @Component
 @Profile("demo")
